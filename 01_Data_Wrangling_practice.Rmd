@@ -131,7 +131,6 @@ op_powers %>%
   slice(50:n())
 ```
 
-
 ```{r slice-min}
 op_powers %>% 
   slice_min(power, n = 5, with_ties = FALSE)
@@ -450,4 +449,3 @@ plot02 <- op_powers %>%
   ) +
   scale_size_continuous(range = c(1,5))
 ```
-
