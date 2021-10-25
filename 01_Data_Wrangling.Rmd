@@ -1,0 +1,453 @@
+---
+title: "01_Data_Wrangling"
+author: '@arifpras'
+date: "25/10/2021"
+output: html_document
+---
+
+```{r clearing, include = FALSE}
+#clearing the environment
+rm(list=ls())
+ls()
+```
+
+```{r packages, include = FALSE}
+#installing packages - all
+install.packages("tidyverse")
+library(tidyverse)
+
+#installing packages - separately
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("tidyr")
+install.packages("readxl")
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(readxl)
+
+easypackages::libraries("dplyr", "ggplot2", "tidyr", "readxl")
+#--install.packages("easypackages")
+
+pacman::p_load(dplyr, ggplot2, tidyr, readxl)
+#--install.packages("pacman")
+
+#pacman::p_load(tidylog)
+library(tidylog, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+```
+
+```{r directory}
+#setting working directory
+getwd()
+setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData")
+dir()
+```
+
+```{r onepiece}
+#sources:
+##--https://www.kaggle.com/michau96
+##--https://www.kaggle.com/aditya2803
+##--https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+##--https://listfist.com/list-of-one-piece-characters-by-age
+
+#".csv" files - local
+
+#op_chapters <- read.csv(file.choose())
+#op_chapters <- read.csv("OP_chapters.csv")
+
+#op_characters <- read.csv(file.choose())
+#op_characters <- read.csv("OP_characters.csv")
+
+#op_ratings <- read.csv(file.choose())
+#op_ratings <- read.csv("OP_ratings.csv")
+
+op_powers <- read.csv(file.choose())
+op_powers <- read.csv("OP_powers.csv")
+
+op_ages <- read.csv(file.choose())
+op_ages <- read.csv("OP_ages.csv")
+
+#".xlsx" files - local
+#op_chapters <- read_excel(path = "OP_all.xlsx", sheet = "OP_chapters")
+#op_characters <- read_excel(path = "OP_all.xlsx", sheet = "OP_characters")
+#op_ratings <- read_excel(path = "OP_all.xlsx", sheet = "OP_ratings")
+op_powers <- read_excel(path = "OP_all.xlsx", sheet = "OP_powers")
+op_ages <- read_excel(path = "OP_all.xlsx", sheet = "OP_ages")
+
+#".csv" files - cloud
+#op_chapters <- read.csv("https://www.dropbox.com/s/t1vrxsa4ad0m2c4/OP_chapters.csv?dl=1")
+#op_characters <- read.csv("https://www.dropbox.com/s/e74njw4iw7qfzbl/OP_characters.csv?dl=1")
+#op_ratings <- read.csv("https://www.dropbox.com/s/qvdhlnkyk02giuj/OP_ratings.csv?dl=1")
+op_powers <- read.csv("https://www.dropbox.com/s/t3gbzzscz438ecp/OP_powers.csv?dl=1")
+op_ages <- read.csv("https://www.dropbox.com/s/r24vzv7eyz35irr/OP_ages.csv?dl=1")
+
+require(devtools)
+install_github("Displayr/flipAPI")
+library(flipAPI)
+
+#".xlsx" files - cloud
+#op_chapters <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = 1)
+#op_characters <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_characters")
+#op_ratings <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = 3)
+op_powers <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_powers", want.data.frame = TRUE)
+op_ages <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_ages", want.data.frame = TRUE)
+```
+
+```{r checking}
+str(op_powers)
+str(op_ages)
+
+glimpse(op_powers)
+glimpse(op_ages)
+```
+
+```{r filter}
+op_powers %>% 
+  filter(affiliations == "Marine")
+```
+
+```{r arrange}
+op_powers %>% 
+  arrange(desc(affiliations))
+```
+
+```{r recode}
+law <- op_powers %>% 
+  mutate(character = 
+           recode(character, 
+                  "Trafalgar D. Water Law" = "Trafalgar D. Law"))
+```
+
+```{r slice}
+op_powers %>% 
+  slice(10L)
+
+op_powers %>% 
+  slice(n())
+
+op_powers %>% 
+  slice(50:n())
+```
+
+
+```{r slice-min}
+op_powers %>% 
+  slice_min(power, n = 5, with_ties = FALSE)
+
+op_powers %>% 
+  slice_min(power, prop = 0.5, with_ties = TRUE)
+```
+
+```{r slice-tail}
+op_powers %>% 
+  slice_tail(n = 5)
+
+op_powers %>% 
+  slice_tail(prop = 0.5)
+```
+
+```{r slice-max}
+op_powers %>% 
+  slice_max(power, n = 5, with_ties = FALSE)
+
+op_powers %>% 
+  slice_max(power, prop = 0.5, with_ties = TRUE)
+```
+
+```{r slice-head}
+op_powers %>% 
+  slice_head(n = 5)
+
+op_powers %>% 
+  slice_head(prop = 0.5)
+```
+
+```{r select}
+op_powers %>% 
+  select(character, affiliations)
+
+op_powers %>% 
+  select(-level)
+```
+
+```{r relocate}
+op_powers %>% 
+  relocate(character, power, affiliations)
+```
+
+```{r rename}
+status <- op_powers %>% 
+  rename("status" = "level")
+```
+
+```{r count}
+op_powers %>% 
+  filter(affiliations == "Marine") %>% 
+  count()
+```
+
+```{r mutate}
+op_powers %>% 
+  mutate(anime = "One Piece")
+```
+
+```{r transmute}
+op_powers %>% 
+  transmute(anime = "One Piece")
+```
+
+```{r group-by}
+op_powers %>% 
+  arrange(affiliations, desc(power)) %>% 
+  group_by(affiliations) %>% 
+  mutate(rank = row_number()) %>% 
+  ungroup() %>% 
+  arrange(affiliations) %>% 
+  select(character, affiliations, rank)
+```
+
+```{r summarise}
+op_powers %>% 
+  arrange(affiliations, desc(power)) %>% 
+  group_by(affiliations) %>% 
+  summarise(avg = mean(power, na.rm = TRUE)) %>% 
+  ungroup()
+```
+
+```{r row-wise}
+op_powers %>% 
+  mutate(fase1 = power*0.25,
+         fase2 = power*0.75) %>% 
+  rowwise(character) %>% 
+  summarise(total = sum(fase1, fase2))
+```
+
+```{r left-join}
+op_powers %>% 
+  left_join(op_ages, by = c("character" = "name"))
+```
+
+```{r inner-join}
+op_powers %>% 
+  inner_join(op_ages, by = c("character" = "name"))
+```
+
+```{r right-join}
+op_powers %>% 
+  right_join(op_ages, by = c("character" = "name"))
+```
+
+```{r full-join}
+op_powers %>% 
+  full_join(op_ages, by = c("character" = "name"))
+```
+
+```{r semi-join}
+op_powers %>% 
+  semi_join(op_ages, by = c("character" = "name"))
+```
+
+```{r anti-join}
+op_powers %>% 
+  anti_join(op_ages, by = c("character" = "name"))
+```
+
+```{r ifelse}
+op_powers %>% 
+  mutate(villain = ifelse(affiliations == "Blackbeard Pirates", "Villain", "NA"))
+```
+
+```{r luffy}
+luffy00 <- data.frame(
+  arc = c("1-Punk Hazard", "2-Dressrosa", "3-Zou", "4-Whole Cake Island", "5-Levely", "6-Wano Country"),
+  power = c(75, NA, 80, 82, NA, 85)
+)
+
+luffy00 <- tribble(
+  ~arc, ~power,
+  "1-Punk Hazard", 75,
+  "2-Dressrosa", NA,
+  "3-Zou", 80,
+  "4-Whole Cake Island", 82,
+  "5-Levely", NA
+)
+
+luffy00
+
+luffy00 <- luffy00 %>% 
+  add_row(arc = "6- Wano Country",
+          power = 85)
+
+is.na(luffy00)
+
+#data frame
+colSums(is.na(luffy00))
+
+mean(luffy00$power)
+mean(luffy00$power, na.rm = TRUE)
+
+#vector
+#which(is.na(luffy00))
+#sum(is.na(luffy00)) 
+```
+
+```{r fill}
+luffy01 <- luffy00 %>%
+  fill(power, .direction = "down") %>% 
+  mutate(method = "fill")
+
+luffy01
+```
+
+```{r na-mean}
+luffy02 <- luffy00 %>% 
+  mutate(
+    power = replace(power, is.na(power), mean(power, na.rm = TRUE)),
+    method = "mean"
+    )
+
+#luffy$power[is.na(luffy$power)] <- mean(luffy$power, na.rm = TRUE)
+luffy02
+```
+
+```{r interpolate}
+luffy03 <- luffy00 %>% 
+  mutate(power = zoo::na.approx(power),
+         method = "interpolate")
+```
+
+```{r drop}
+luffy00 %>% drop_na()
+```
+
+```{r row-bind}
+luffy04 <- rbind(luffy01, luffy02, luffy03)
+
+luffy04 <- luffy01 %>% 
+  bind_rows(luffy02, luffy03)
+```
+
+```{r col-bind}
+luffy05 <- cbind(luffy01, luffy02, luffy03)
+
+luffy05 <- luffy01 %>% 
+  bind_cols(luffy02, luffy03)
+```
+
+```{r piv-long}
+db01 <-  op_powers %>%
+  left_join(op_ages, by = c("character" = "name")) %>% 
+  select(-level) %>% 
+  relocate(character, affiliations, power, age) %>% 
+  pivot_longer(cols = power:age, 
+               names_to = "variable", 
+               values_to = "value")
+```
+
+```{r piv-wider}
+db00 <- db01 %>% 
+  pivot_wider(names_from = variable,
+              values_from = value)
+```
+
+```{r plot01}
+plot01 <- op_powers %>% 
+  left_join(op_ages, by = c("character" = "name")) %>% 
+  relocate(character, age, power) %>% 
+  #group_by(level) %>% 
+  slice_max(power, n = 15, with_ties = FALSE) %>%
+  #ungroup() %>% 
+  ggplot(aes(x = reorder(character, power), 
+             y = age)) +
+  geom_point(aes(color = factor(affiliations), size = power)) +
+  coord_flip() +
+  nord::scale_color_nord("aurora") +
+  xlab("") +
+  ylab("Age") +
+  theme_test() +
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_text(size = 11),
+    axis.line.y = element_blank(),
+    axis.title.y = element_text(size = 11),
+    axis.text.y = element_text(size = 12),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 11),
+    legend.key.size = unit(0.5, "cm"),
+    legend.spacing = unit(1, "cm"),
+    plot.title = element_text(
+      hjust = 0, size = 18, face = "bold"
+    ),
+    plot.subtitle = element_text(hjust = 0, size = 17),
+    plot.caption = element_text(hjust = 0, size = 11),
+    # legend.title = element_blank(),
+    legend.position = "right",
+    strip.text.x = element_text(size = 8),
+    panel.grid.major.y = element_line(colour = "grey97"),
+    panel.ontop = FALSE
+  ) +
+  guides(size = guide_legend("Power"), color = guide_legend("Affiliation")) +
+  labs(
+    title = "The top 15-most powerful characters",
+    subtitle = "",
+    caption = ""
+  ) +
+  scale_size_continuous(range = c(1,5))
+```
+
+```{r plot02}
+plot02 <- op_powers %>% 
+  left_join(op_ages, by = c("character" = "name")) %>% 
+  relocate(character, age, power) %>% 
+  #group_by(level) %>% 
+  slice_max(power, n = 15, with_ties = FALSE) %>%
+  #ungroup() %>% 
+  ggplot(aes(x = reorder(character, power), 
+             y = factor(affiliations))) +
+  geom_point(aes(color = age, size = power)) +
+  coord_flip() +
+  #nord::scale_color_nord("victory_bonds", discrete = FALSE) +
+  viridis::scale_colour_viridis(option = "viridis", direction = -1) +
+  xlab("") +
+  ylab("") +
+  theme_test() +
+  theme(
+    axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust=1),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_text(size = 11),
+    axis.line.y = element_blank(),
+    axis.title.y = element_text(size = 11),
+    axis.text.y = element_text(size = 12),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 11),
+    legend.key.size = unit(0.5, "cm"),
+    legend.spacing = unit(1, "cm"),
+    plot.title = element_text(
+      hjust = 0, size = 18, face = "bold"
+    ),
+    plot.subtitle = element_text(hjust = 0, size = 17),
+    plot.caption = element_text(hjust = 0, size = 11),
+    # legend.title = element_blank(),
+    legend.position = "right",
+    strip.text.x = element_text(size = 8),
+    panel.grid.major.y = element_line(colour = "grey97"),
+    panel.ontop = FALSE
+  ) +
+  guides(size = guide_legend("Power"), color = guide_colorbar("Age")) +
+  labs(
+    title = "The top 15-most powerful characters",
+    subtitle = "",
+    caption = ""
+  ) +
+  scale_size_continuous(range = c(1,5))
+```
+
