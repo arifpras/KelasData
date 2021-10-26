@@ -82,27 +82,6 @@ xaringanExtra::use_progress_bar(color = "orange", location = "top")
 An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the Indonesia Endowment Fund for Education ("Lembaga Pengelola Dana Pendidikan"), at the moment, on study leave to join a PhD program in the <a href="https://www.nottingham.ac.uk/economics/people/arif.sulistiono">School of Economics, the University of Nottingham</a> with research interests in Indonesia's government bonds market and their bondholders' behaviour. Also a research assistant at <a href="https://www.tracktheeconomy.ac.uk/arif-sulistiono">tracktheconomy.ac.uk</a>. <br> <br>
 <a href="mailto:ap.sulistiono@gmail.com"><i class="fa fa-envelope fa-fw"></i></a></a> <a href="https://www.facebook.com/arifpras"> <i class="fa fa-facebook fa-fw"></i></a> <a href="https://github.com/arifpras"><i class="fa fa-github fa-fw"></i></a> <a href="https://www.instagram.com/arifpras"> <i class="fa fa-instagram fa-fw"></i></a> <a href="https://arifpras.medium.com/"> <i class="fa fa-medium fa-fw"></i></a> <a href="https://twitter.com/arifpras"> <i class="fa fa-twitter fa-fw"></i></a> <a href="https://arifpras.com"> <i class="fa fa-wordpress fa-fw"></i></a>
 ]
----
-
-# Animating bar plot
-.pull-left[ <br>
-<blockquote class="twitter-tweet" data-width="300" data-theme="light" data-cards="hidden" data-dnt="true" align="center"><p lang="in" dir="ltr">Visualisasi data tentang utang dan pendapatan per penduduk dengan menggunakan bahasa pemrograman R. Kode bisa dilihat pada tautan <a href="https://t.co/YzqY3hmGfc">https://t.co/YzqY3hmGfc</a>.<br><br>Secara rasio, tidak berbeda jauh dengan data rasio utang pemerintah terhadap PDB seperti yang disampaikan <a href="https://twitter.com/DJPPRkemenkeu?ref_src=twsrc%5Etfw">@DJPPRkemenkeu</a>. <a href="https://t.co/1D6k2nmHsW">pic.twitter.com/1D6k2nmHsW</a></p>&mdash; Arif P. Sulistiono (@arifpras) <a href="https://twitter.com/arifpras/status/1256101386758115328?ref_src=twsrc%5Etfw">May 1, 2020</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-]
-
-.pull-right[
-<img src="file:///Users/arifpras/OneDrive%20-%20The%20University%20of%20Nottingham/03_R/20200430/debt16.gif" style="width: 90%" align="left">
-]
-
----
-# Animating line plot
-.pull-left[ <br>
-<blockquote class="twitter-tweet" data-width="300" data-theme="light" data-cards="hidden" data-dnt="true" align="center"><p lang="in" dir="ltr">Visualisasi data tentang pergerakan nilai tukar <a href="https://twitter.com/hashtag/rupiah?src=hash&amp;ref_src=twsrc%5Etfw">#rupiah</a> terhadap dollar AS pada <a href="https://twitter.com/hashtag/krisis?src=hash&amp;ref_src=twsrc%5Etfw">#krisis</a> 2008 dan tahun ini dengan menggunakan bahasa pemrograman <a href="https://twitter.com/hashtag/R?src=hash&amp;ref_src=twsrc%5Etfw">#R</a>. Kode bisa dilihat pada tautan <a href="https://t.co/YzqY3hmGfc">https://t.co/YzqY3hmGfc</a>. <a href="https://t.co/PMHFjWIJQB">pic.twitter.com/PMHFjWIJQB</a></p>&mdash; Arif P. Sulistiono (@arifpras) <a href="https://twitter.com/arifpras/status/1257366542553055232?ref_src=twsrc%5Etfw">May 4, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-]
-
-.pull-right[
-<img src="file:///Users/arifpras/OneDrive%20-%20The%20University%20of%20Nottingham/03_R/20200502/idr05.gif" style="width: 90%" align="left">
-]
 
 ---
 # <span style="color:orange">**Fun**</span>ctions
@@ -122,7 +101,7 @@ An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the 
 *   Analysing: `group_by()`, `summarise()`/`summarize()`, `rowwise()`
 *   Merging: `left_join()`, `inner_join()`, `right_join()`, `full_join()`, `semi_join()`, `anti_join()`
 *   Manipulating: `ifelse()`
-*   Dealing with `NA`: `fill()`, `complete()`
+*   Dealing with `NA`: `fill()`, `replace()`, `zoo::na.approx()`, `drop_na()`
 *   Combining: `rbind()`, `bind_rows`, `cbind()`, `bind_cols`
 *   Reshaping: `pivot_wider()`, `pivot_longer()`
 ]
@@ -159,23 +138,22 @@ class: inverse center middle
 # %>%
 Pipe operator: ...then
 
-
 ---
 # Prequisites
 
-## Clean the environment
+### Clean the environment
 ```{r eval=FALSE}
 rm(list=ls())
 ls()
 ```
 
-## Install the package & load the library
+### Install the package & load the library
 ```{r eval=FALSE}
 install.packages("tidyverse")
 library(tidyverse)
 ```
 
-## Set the working directory
+### Set the working directory
 ```{r eval=FALSE}
 getwd()
 setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData")
@@ -280,6 +258,28 @@ op_powers %>%
 .center[
 ```{r ref.label = 'plot-last', fig.callout = TRUE, echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "70%", fig.align = "center", fig.retina = 3}
 ```
+]
+
+---
+
+# Animating bar plot
+.pull-left[ <br>
+<blockquote class="twitter-tweet" data-width="300" data-theme="light" data-cards="hidden" data-dnt="true" align="center"><p lang="in" dir="ltr">Visualisasi data tentang utang dan pendapatan per penduduk dengan menggunakan bahasa pemrograman R. Kode bisa dilihat pada tautan <a href="https://t.co/YzqY3hmGfc">https://t.co/YzqY3hmGfc</a>.<br><br>Secara rasio, tidak berbeda jauh dengan data rasio utang pemerintah terhadap PDB seperti yang disampaikan <a href="https://twitter.com/DJPPRkemenkeu?ref_src=twsrc%5Etfw">@DJPPRkemenkeu</a>. <a href="https://t.co/1D6k2nmHsW">pic.twitter.com/1D6k2nmHsW</a></p>&mdash; Arif P. Sulistiono (@arifpras) <a href="https://twitter.com/arifpras/status/1256101386758115328?ref_src=twsrc%5Etfw">May 1, 2020</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+]
+
+.pull-right[
+<img src="file:///Users/arifpras/OneDrive%20-%20The%20University%20of%20Nottingham/03_R/20200430/debt16.gif" style="width: 90%" align="left">
+]
+
+---
+# Animating line plot
+.pull-left[ <br>
+<blockquote class="twitter-tweet" data-width="300" data-theme="light" data-cards="hidden" data-dnt="true" align="center"><p lang="in" dir="ltr">Visualisasi data tentang pergerakan nilai tukar <a href="https://twitter.com/hashtag/rupiah?src=hash&amp;ref_src=twsrc%5Etfw">#rupiah</a> terhadap dollar AS pada <a href="https://twitter.com/hashtag/krisis?src=hash&amp;ref_src=twsrc%5Etfw">#krisis</a> 2008 dan tahun ini dengan menggunakan bahasa pemrograman <a href="https://twitter.com/hashtag/R?src=hash&amp;ref_src=twsrc%5Etfw">#R</a>. Kode bisa dilihat pada tautan <a href="https://t.co/YzqY3hmGfc">https://t.co/YzqY3hmGfc</a>. <a href="https://t.co/PMHFjWIJQB">pic.twitter.com/PMHFjWIJQB</a></p>&mdash; Arif P. Sulistiono (@arifpras) <a href="https://twitter.com/arifpras/status/1257366542553055232?ref_src=twsrc%5Etfw">May 4, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+]
+
+.pull-right[
+<img src="file:///Users/arifpras/OneDrive%20-%20The%20University%20of%20Nottingham/03_R/20200502/idr05.gif" style="width: 90%" align="left">
 ]
 
 ---
