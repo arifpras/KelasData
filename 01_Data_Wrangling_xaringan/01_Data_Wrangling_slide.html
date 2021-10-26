@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Statistics with R:</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Arif P. Sulistiono" />
+    <script src="01_Data_Wrangling_slide_files/header-attrs/header-attrs.js"></script>
+    <link href="01_Data_Wrangling_slide_files/remark-css/default.css" rel="stylesheet" />
+    <link href="01_Data_Wrangling_slide_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="01_Data_Wrangling_slide_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <script src="01_Data_Wrangling_slide_files/clipboard/clipboard.min.js"></script>
+    <link href="01_Data_Wrangling_slide_files/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="01_Data_Wrangling_slide_files/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"<i class=\"fa fa-times-circle\" style=\"color: #F94144\"><\/i>"})</script>
+    <link href="01_Data_Wrangling_slide_files/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="01_Data_Wrangling_slide_files/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="01_Data_Wrangling_slide_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="01_Data_Wrangling_slide_files/panelset/panelset.js"></script>
+    <script src="01_Data_Wrangling_slide_files/freezeframe/freezeframe.min.js"></script>
+    <script src="01_Data_Wrangling_slide_files/xaringanExtra-freezeframe/freezeframe-init.js"></script>
+    <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
+    <link href="01_Data_Wrangling_slide_files/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="01_Data_Wrangling_slide_files/xaringanExtra-progressBar/progress-bar.js"></script>
+    <script src="01_Data_Wrangling_slide_files/htmlwidgets/htmlwidgets.js"></script>
+    <script src="01_Data_Wrangling_slide_files/jquery/jquery.min.js"></script>
+    <script src="01_Data_Wrangling_slide_files/datatables-binding/datatables.js"></script>
+    <link href="01_Data_Wrangling_slide_files/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="01_Data_Wrangling_slide_files/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="01_Data_Wrangling_slide_files/dt-core/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Statistics with R:
+## Data Wrangling
+### Arif P. Sulistiono
+### <br>Kelas Data on 2021-10-26<br><a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>.xe__progress-bar__container {
+  top:0;
+  opacity: 1;
+  position:absolute;
+  right:0;
+  left: 0;
+}
+.xe__progress-bar {
+  height: 0.25em;
+  background-color: orange;
+  width: calc(var(--slide-current) / var(--slide-total) * 100%);
+}
+.remark-visible .xe__progress-bar {
+  animation: xe__progress-bar__wipe 200ms forwards;
+  animation-timing-function: cubic-bezier(.86,0,.07,1);
+}
+@keyframes xe__progress-bar__wipe {
+  0% { width: calc(var(--slide-previous) / var(--slide-total) * 100%); }
+  100% { width: calc(var(--slide-current) / var(--slide-total) * 100%); }
+}</style>
+
+# About Me
+.center[
+![:scale 50%](https://media.giphy.com/media/AMx5NSwJKQnsY/giphy.gif)
+
+An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the Indonesia Endowment Fund for Education ("Lembaga Pengelola Dana Pendidikan"), at the moment, on study leave to join a PhD program in the &lt;a href="https://www.nottingham.ac.uk/economics/people/arif.sulistiono"&gt;School of Economics, the University of Nottingham&lt;/a&gt; with research interests in Indonesia's government bonds market and their bondholders' behaviour. Also a research assistant at &lt;a href="https://www.tracktheeconomy.ac.uk/arif-sulistiono"&gt;tracktheconomy.ac.uk&lt;/a&gt;. &lt;br&gt; &lt;br&gt;
+&lt;a href="mailto:ap.sulistiono@gmail.com"&gt;&lt;i class="fa fa-envelope fa-fw"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/a&gt; &lt;a href="https://www.facebook.com/arifpras"&gt; &lt;i class="fa fa-facebook fa-fw"&gt;&lt;/i&gt;&lt;/a&gt; &lt;a href="https://github.com/arifpras"&gt;&lt;i class="fa fa-github fa-fw"&gt;&lt;/i&gt;&lt;/a&gt; &lt;a href="https://www.instagram.com/arifpras"&gt; &lt;i class="fa fa-instagram fa-fw"&gt;&lt;/i&gt;&lt;/a&gt; &lt;a href="https://arifpras.medium.com/"&gt; &lt;i class="fa fa-medium fa-fw"&gt;&lt;/i&gt;&lt;/a&gt; &lt;a href="https://twitter.com/arifpras"&gt; &lt;i class="fa fa-twitter fa-fw"&gt;&lt;/i&gt;&lt;/a&gt; &lt;a href="https://arifpras.com"&gt; &lt;i class="fa fa-wordpress fa-fw"&gt;&lt;/i&gt;&lt;/a&gt;
+]
+
+---
+# &lt;span style="color:orange"&gt;**Fun**&lt;/span&gt;ctions
+
+.panelset[
+.panel[.panel-name[1: Data Wrangling]
+
+.pull-left[
+## .center[&lt;svg viewBox="0 0 640 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M575.2 325.7c.2-1.9.8-3.7.8-5.6 0-35.3-28.7-64-64-64-12.6 0-24.2 3.8-34.1 10-17.6-38.8-56.5-66-101.9-66-61.8 0-112 50.1-112 112 0 3 .7 5.8.9 8.7-49.6 3.7-88.9 44.7-88.9 95.3 0 53 43 96 96 96h272c53 0 96-43 96-96 0-42.1-27.2-77.4-64.8-90.4zm-430.4-22.6c-43.7-43.7-43.7-114.7 0-158.3 43.7-43.7 114.7-43.7 158.4 0 9.7 9.7 16.9 20.9 22.3 32.7 9.8-3.7 20.1-6 30.7-7.5L386 81.1c4-11.9-7.3-23.1-19.2-19.2L279 91.2 237.5 8.4C232-2.8 216-2.8 210.4 8.4L169 91.2 81.1 61.9C69.3 58 58 69.3 61.9 81.1l29.3 87.8-82.8 41.5c-11.2 5.6-11.2 21.5 0 27.1l82.8 41.4-29.3 87.8c-4 11.9 7.3 23.1 19.2 19.2l76.1-25.3c6.1-12.4 14-23.7 23.6-33.5-13.1-5.4-25.4-13.4-36-24zm-4.8-79.2c0 40.8 29.3 74.8 67.9 82.3 8-4.7 16.3-8.8 25.2-11.7 5.4-44.3 31-82.5 67.4-105C287.3 160.4 258 140 224 140c-46.3 0-84 37.6-84 83.9z"&gt;&lt;/path&gt;&lt;/svg&gt;]
+*   Rows: `filter()`, `arrange()`, `recode()`, `slice()`, `slice_min()`, `slice_max()`, `slice_head()`, `slice_tail()`
+*   Columns: `select()`, `relocate()`, `rename()`
+*   Both: `count()`, `mutate()`, `transmute()`
+]
+
+.pull-right[
+## .center[&lt;svg viewBox="0 0 576 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M342.8 352.7c5.7-9.6 9.2-20.7 9.2-32.7 0-35.3-28.7-64-64-64-17.2 0-32.8 6.9-44.3 17.9-16.3-29.6-47.5-49.9-83.7-49.9-53 0-96 43-96 96 0 2 .5 3.8.6 5.7C27.1 338.8 0 374.1 0 416c0 53 43 96 96 96h240c44.2 0 80-35.8 80-80 0-41.9-32.3-75.8-73.2-79.3zm222.5-54.3c-93.1 17.7-178.5-53.7-178.5-147.7 0-54.2 29-104 76.1-130.8 7.3-4.1 5.4-15.1-2.8-16.7C448.4 1.1 436.7 0 425 0 319.1 0 233.1 85.9 233.1 192c0 8.5.7 16.8 1.8 25 5.9 4.3 11.6 8.9 16.7 14.2 11.4-4.7 23.7-7.2 36.4-7.2 52.9 0 96 43.1 96 96 0 3.6-.2 7.2-.6 10.7 23.6 10.8 42.4 29.5 53.5 52.6 54.4-3.4 103.7-29.3 137.1-70.4 5.3-6.5-.5-16.1-8.7-14.5z"&gt;&lt;/path&gt;&lt;/svg&gt;]
+*   Analysing: `group_by()`, `summarise()`/`summarize()`, `rowwise()`
+*   Merging: `left_join()`, `inner_join()`, `right_join()`, `full_join()`, `semi_join()`, `anti_join()`
+*   Manipulating: `ifelse()`
+*   Dealing with `NA`: `fill()`, `replace()`, `zoo::na.approx()`, `drop_na()`
+*   Combining: `rbind()`, `bind_rows`, `cbind()`, `bind_cols`
+*   Reshaping: `pivot_wider()`, `pivot_longer()`
+]
+]
+
+.panel[.panel-name[2: Data Visualisation]
+
+.pull-left[
+## .center[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M416 128c-.6 0-1.1.2-1.6.2 1.1-5.2 1.6-10.6 1.6-16.2 0-44.2-35.8-80-80-80-24.6 0-46.3 11.3-61 28.8C256.4 24.8 219.3 0 176 0 114.1 0 64 50.1 64 112c0 7.3.8 14.3 2.1 21.2C27.8 145.8 0 181.5 0 224c0 53 43 96 96 96h320c53 0 96-43 96-96s-43-96-96-96zM88 374.2c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0zm160 0c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0zm160 0c-12.8 44.4-40 56.4-40 87.7 0 27.7 21.5 50.1 48 50.1s48-22.4 48-50.1c0-31.4-27.2-43.1-40-87.7-2.2-8.1-13.5-8.5-16 0z"&gt;&lt;/path&gt;&lt;/svg&gt;]
+*   Scatter plot: `geom_point()`
+*   Line chart: `geom_line()`
+*   Bar plot: `geom_bar()`, `geom_col()`
+*   Box plot: `geom_boxplot()`
+*   Histogram: `geom_histogram()`
+]
+]
+
+.panel[.panel-name[3: Basic Modelling]
+.pull-left[
+## .center[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M48 352c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm416 0c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm-119 11.1c4.6-14.5 1.6-30.8-9.8-42.3-11.5-11.5-27.8-14.4-42.3-9.9-7-13.5-20.7-23-36.9-23s-29.9 9.5-36.9 23c-14.5-4.6-30.8-1.6-42.3 9.9-11.5 11.5-14.4 27.8-9.9 42.3-13.5 7-23 20.7-23 36.9s9.5 29.9 23 36.9c-4.6 14.5-1.6 30.8 9.9 42.3 8.2 8.2 18.9 12.3 29.7 12.3 4.3 0 8.5-1.1 12.6-2.5 7 13.5 20.7 23 36.9 23s29.9-9.5 36.9-23c4.1 1.3 8.3 2.5 12.6 2.5 10.8 0 21.5-4.1 29.7-12.3 11.5-11.5 14.4-27.8 9.8-42.3 13.5-7 23-20.7 23-36.9s-9.5-29.9-23-36.9zM512 224c0-53-43-96-96-96-.6 0-1.1.2-1.6.2 1.1-5.2 1.6-10.6 1.6-16.2 0-44.2-35.8-80-80-80-24.6 0-46.3 11.3-61 28.8C256.4 24.8 219.3 0 176 0 114.1 0 64 50.1 64 112c0 7.3.8 14.3 2.1 21.2C27.8 145.8 0 181.5 0 224c0 53 43 96 96 96h43.4c3.6-8 8.4-15.4 14.8-21.8 13.5-13.5 31.5-21.1 50.8-21.3 13.5-13.2 31.7-20.9 51-20.9s37.5 7.7 51 20.9c19.3.2 37.3 7.8 50.8 21.3 6.4 6.4 11.3 13.8 14.8 21.8H416c53 0 96-43 96-96z"&gt;&lt;/path&gt;&lt;/svg&gt;]
+* Loading the dataset: `read_csv()` or `read_excel()`, 
+* Correlation: `Hmisc::rcorr(as.matrix())`
+* Summary: `stargazer()`
+* Linear regression: `lm()`, `lm_robust()`, `dynlm()`
+* Reporting: `broom::tidy()`
+* Saving: `write_csv()`
+]
+]
+]
+
+---
+class: inverse center middle
+
+# %&gt;%
+Pipe operator: ...then
+
+---
+# Prequisites
+
+### Clean the environment
+
+```r
+rm(list=ls())
+ls()
+```
+
+### Install the package &amp; load the library
+
+```r
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+### Set the working directory
+
+```r
+getwd()
+setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData")
+dir()
+```
+
+---
+exclude: false
+# Data
+## Ages
+
+```r
+library(readxl)
+op_ages &lt;- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ages")
+DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 4))
+```
+
+<div id="htmlwidget-a61a9b7a33e086b3d824" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a61a9b7a33e086b3d824">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282","283","284","285","286","287","288","289","290","291","292","293","294","295","296","297","298","299","300","301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318","319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334","335","336","337","338","339","340","341","342","343","344","345","346","347","348","349","350","351","352","353","354","355","356","357","358","359","360","361","362","363","364","365","366","367","368","369","370","371","372","373","374","375","376","377","378","379","380","381","382","383","384","385","386","387","388","389","390","391","392","393","394","395","396","397","398","399","400","401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422","423","424","425","426","427","428","429","430","431","432","433","434","435","436","437","438","439","440","441","442","443","444","445","446","447","448","449","450","451","452","453","454","455","456","457","458","459","460","461","462","463","464","465","466","467","468","469","470","471","472","473","474","475","476","477","478","479","480","481","482"],["Zunesha","Jarul","Jorul","Hatcha","Brogy","Dorry","Morley","Oars","Kashii","Oimo","Kureha","Surume","Jaguar D. Saul","Sanjuan Wolf","Haredas","Streusen","Brook","Clover","Hajrudin","Tenguyama Hitetsu","Carmel","Amazon","Sengoku","Chinjao","Monkey D. Garp","Silvers Rayleigh","Bakkin","Tsuru (Marine)","Boodle","Gerd","Crocus","Edward Newgate","Kokoro","Little Oars Jr.","Shimotsuki Yasuie","Hyogoro","Lao G","Neptune","Onimaru","Charlotte Linlin","Gan Fall","Hiluluk","Tom","Zeff","Spandine","Chief","Shakuyaku","Goldberg","Loki","Road","Tonjit","Den","Minister of the Left","Fukurokuju","Giolla","Riku Doldo III","Jigoro","Kaido","Borsalino Kizaru","Elizabello II","Ashura Doji","Brannew","Mukkashimi Tower","Queen","Vinsmoke Judge","Curly Dadan","Minister of the Right","Monkey D. Dragon","Rosward","Sakazuki Akainu","Tsuru (Wano)","Issho Fujitora","Kurozumi Orochi","Pagaya","And","Emporio Ivankov","Gol D. Roger","Laboon","Morgans","T Bone","Machvise","Squard","Drophy","Heracles","Koushirou","Benn Beckman","Charlotte Perospero","Gecko Moria","Igaram","Nefertari Cobra","Charlotte Compote","Kuzan Aokiji","Shinobu","Trebol","Bas","Charlotte Daifuku","Charlotte Katakuri","Charlotte Oven","Fisher Tiger","Genzo","Momonga","Pound","Bartholomew Kuma","Charlotte Amande","Charlotte Effilée","Charlotte Hachée","Charlotte Mondée","Denjiro","Hogback","Karasu","King","Magellan","Shimotsuki Ryuma","Urouge","Vista","Yasopp","Aladdin","Charlotte Cabaletta","Charlotte Cadenza","Charlotte Counter","Charlotte Gala","Charlotte Opera","Crocodile","Higuma","Jerry","Jinbe","Senor Pink","Tamago","Chadros Higelyges","Charlotte Angel","Charlotte Cracker","Charlotte Custard","Diamante","Fujin","Gaimon","Izou","Marco","Raijin","Sarutobi","Turco","Yama","Charlotte Zuccotto","Krieg","Kyros","Morgan","Shiryu of the Rain","Charlotte Broyé","Charlotte Brûlée","Dracule Mihawk","Kazekage","Mont Blanc Cricket","Avalo Pizarro","Bluejam","Capone Bege","Charlotte Basskarte","Charlotte Dosmarche","Charlotte Nusstorte","Daikoku","Hanzo","Diamond Jozu","Kerville","Orlumbus","Arlong","Chaka","Charlotte Noisette","Donquixote Doflamingo","Kawamatsu","Laffitte","Spandam","Vergo","Caesar Clown","Charlotte Cornstarch","Charlotte Mash","Charlotte Moscato","Iceburg","Inuarashi","Ipponmatsu","Marshall D. Teach","Nekomamushi","Pica","Suleiman","Tomato Gang","Buggy","Charlotte Compo","Charlotte Laurin","Enel","Hyouzou","Kalgara","Kozuki Oden","Kurozumi Kanjuro","Mont Blanc Noland","Red Haired Shanks","Bastille","Charlotte Mont-d'Or","Foxy","Hack (Fishmen)","Hatchan","Kuroobi","Vasco Shot","Who's-Who","Charlotte Marnier","Charlotte Mozart","Galdino","Jabra","Lindbergh","Absalom","Catarina Devon","Charlotte High-Fat","Charlotte Tablet","Demaro Black","Franky","Kelly Funk","Kin'emon","Kozuki Toki","Kumadori","Nezumi","Otohime","Smoker","Vito","Charlotte Cinnamon","Charlotte Citron","Charlotte Smoothie","Chew","Dalton","Edward Weevil","Hannyabal","Kuro","Lucky Roux","Pell","Raizo","Tilestone","Vander Decken IX","Zambai","Belo Betty","Cabaji","Carne","Charlotte Basans","Charlotte Saint-Marc","Hina","Sasaki","Sentomaru","Shishilian","Bobby Funk","Charlotte Melise","Gladius","Gotti","Nico Olvia","Pappag","Peepley Lulu","Shura","X Drake","Bentham","Blueno","Caribou","Charlotte Dacquoise","Chess","Pedro","Basil Hawkins","Boa Hancock","Charlotte Galette","Charlotte Poire","Daz Bones","Fukurou","Gedatsu","Makino","Scratchmen Apoo","Babe","Bell-mère","Boa Sandersonia","Buffalo","Charlotte Bavarois","Charlotte Snack","Daruma","Dosun","Giovanni","Hody Jones","Hold'em","Ikaros Much","Kuromarimo","Monet","Mounblutain","Nico Robin","Rob Lucci","Zeo","Black Maria","Charlotte Praline","Charlotte Prim","Concelot","Coribou","Inazuma","Jango","Jesus Burgess","Mohji","Ohm","Patty","Shirley","Viola","Wapol","Bishamon","Boa Marigold","Charlotte Kanten","Charlotte Katou","Charlotte Montb","Doc Q","Fullbody","Jack","Penguin","Sai","Wanda","Wanze","Yamato","Zala","Alvida","Bellamy","Byron","Charlotte Chiboust","Cocoa","Gin","Hotori","Kalifa","Killer","Kotori","Pekoms","Sarquiss","Satori","Shachi","Shoujou","Van Augur","Wicca","Cavendish","Charlotte Chiffon","Charlotte Lola","Chocolat","Donquixote Rosinante","Gem","Kozuki Hiyori","Paulie","Trafalgar D. Water Law","Yosaku","Charlotte Maple","Charlotte Marble","Charlotte Mobile","Charlotte Myukuru","Duval","Genbo","Johnny","Kaku","Leo","Manjaro","Mansherry","Masira","Pearl","Perona","Porchemy","Rock (Yeti)","Scarlett","Scotch (Yeti)","Wadatsumi","Baby 5","Bartolomeo","Bluegilly","Braham","Charlos","Charlotte Brownie","Drip","Fukaboshi","Jewelry Bonney","Kamakiri","Mikita","Sheepshead","Speed","Victoria Cindry","Vinsmoke Reiju","Wyper","Yazaemon","Buchi","Charlotte Joconde","Eustass Kid","Koala","Ryuboshi","Sadi","Sham","Tashigi","Bepo","Charlotte Raisin","Helmeppo","Ideo","Kikunojo","Kiwi","Koza","Nero","Nojiko","Pascia","Raki","Sabo","Sugar","Ulti","Charlotte Panna","Conis","Jigoku Benten","Mozu","Roronoa Zoro","Vinsmoke Ichiji","Vinsmoke Niji","Vinsmoke Sanji","Vinsmoke Yonji","Charlotte Joscarpone","Charlotte Mascarpone","Kyuin","Mamboshi","Nami","Page One","Portgas D. Ace","Sterry","Charlotte Yuen","Kaya","Monkey D. Luffy","Usopp","Camie","Charlotte Akimeg","Charlotte Allmeg","Charlotte Fuyumeg","Charlotte Harumeg","Charlotte Newgo","Charlotte Newichi","Charlotte Newji","Charlotte Newsan","Charlotte Newshi","Charlotte Nutmeg","Koby","Marguerite","Marianne","Nefertari Vivi","Saldeath","Charlotte Nougat","Matsuge","Shalria","Tony Tony Chopper","Charlotte Pudding","Cowboy","Dellinger","Ivan X","Karoo","Momoo","Rebecca","Shirahoshi","Carrot","Charlotte Flampe","Kentauros","Stomp","Bourbon Jr.","Charlotte Anglais","Chome","Chouchou","Hikoichi","Hoichael","Michael","Charlotte Wafers","Nora Gitsune","Charlotte Willow","Aisa","Charlotte De-Chat","Kuina","Ninjin","Piiman","Tamanegi","Charlotte Normande","Chimney","Charlotte Dolce","Charlotte Dragée","Mocha","Charlotte Anana","Kozuki Momonosuke","Tama (Human)","Toko","Smiley","Capone Pez","Nekozaemon","Nuke Suzume","Oars (Zombie)","Ryunosuke","Torasaburo"],[1000,408,344,188,160,160,160,159,156,153,141,120,105,99,97,92,90,85,81,81,80,79,79,78,78,78,76,76,75,75,73,72,72,72,71,70,70,70,69,68,68,68,67,67,66,65,64,63,63,63,63,62,62,61,61,60,59,59,58,57,56,56,56,56,56,55,55,55,55,55,55,54,54,54,53,53,53,53,53,53,52,52,51,51,51,50,50,50,50,50,49,49,49,49,48,48,48,48,48,48,48,48,47,47,47,47,47,47,47,47,47,47,47,47,47,47,46,46,46,46,46,46,46,46,46,46,46,46,45,45,45,45,45,45,45,45,45,45,45,45,45,44,44,44,44,44,43,43,43,43,43,42,42,42,42,42,42,42,42,42,42,42,41,41,41,41,41,41,41,41,40,40,40,40,40,40,40,40,40,40,40,40,39,39,39,39,39,39,39,39,39,39,38,38,38,38,38,38,38,38,37,37,37,37,37,36,36,36,36,36,36,36,36,36,36,36,36,36,36,35,35,35,35,35,35,35,35,35,35,35,35,35,35,34,34,34,34,34,34,34,34,34,33,33,33,33,33,33,33,33,33,32,32,32,32,32,32,31,31,31,31,31,31,31,31,31,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,29,29,29,29,29,29,29,29,29,29,29,29,29,29,28,28,28,28,28,28,28,28,28,28,28,28,28,28,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,26,26,26,26,26,26,26,26,26,26,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,23,23,23,23,23,23,23,23,22,22,22,22,22,22,22,22,22,22,22,22,22,22,21,21,21,21,21,21,21,21,21,20,20,20,20,20,20,20,20,19,19,19,19,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,17,17,17,17,16,16,16,16,16,16,16,16,15,15,15,15,14,14,14,14,14,14,14,13,13,12,11,11,11,11,11,11,10,10,9,9,9,8,8,8,6,4,1,0,0,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":4,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[4,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+.footnote[
+.small[
+Source: https://listfist.com/list-of-one-piece-characters-by-age
+]
+]
+
+---
+exclude: false
+# Data
+## Powers
+
+```r
+library(readxl)
+op_powers &lt;- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_powers")
+DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 4))
+```
+
+<div id="htmlwidget-66738aa4e03d55e097d5" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-66738aa4e03d55e097d5">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56"],[100,100,100,100,99,95,95,94.5,94,93,93,92,92,89.5,88,85,85,85,84.5,84,82,81,80.5,80,79.5,79,79,79,77,77,77,76.5,76,76,75.5,75,74,74,74,73,72.5,72.5,72,72,71,70,70,69,68,66,65,65,65,65,64,60],["Red Haired Shanks","Marshall D. Teach","Charlotte Linlin","Kaido","Monkey D. Dragon","Sakazuki Akainu","Monkey D. Garp","Sengoku","Kuzan Aokiji","Borsalino Kizaru","Silvers Rayleigh","Issho Fujitora","Dracule Mihawk","Marco","Sabo","Shiryu of the Rain","Magellan","Monkey D. Luffy","Charlotte Katakuri","Diamond Jozu","Charlotte Smoothie","Donquixote Doflamingo","Bartholomew Kuma","Enel","Trafalgar D. Water Law","Charlotte Cracker","Jinbe","Roronoa Zoro","Jesus Burgess","Urouge","Eustass Kid","Crocodile","Emporio Ivankov","Boa Hancock","Vinsmoke Sanji","Gecko Moria","Rob Lucci","Capone Bege","X Drake","Scratchmen Apoo","Cavendish","Smoker","Basil Hawkins","Bartolomeo","Caesar Clown","Hody Jones","Franky","Sai","Leo","Brook","Hajrudin","Ideo","Nico Robin","Buggy","Usopp","Orlumbus"],["Yonko","Yonko","Yonko","Yonko","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General"],["Red Haired Pirates","Blackbeard Pirates","Big Mom Pirates","Beasts Pirates","Revolutionary Army","Marine","Marine","Marine","Marine","Marine","Roger Pirates","Marine","Sichibukai","Whitebeard Pirates","Revolutionary Army","Blackbeard Pirates","Marine","Straw Hat Pirates","Big Mom Pirates","Whitebeard Pirates","Big Mom Pirates","Donquixote Pirates","Marine","God's Army","Heart Pirates","Big Mom Pirates","Straw Hat Pirates","Straw Hat Pirates","Blackbeard Pirates","Fallen Monk Pirates","Kid Pirates","Sichibukai","Revolutionary Army","Kuja Pirates","Straw Hat Pirates","Thriller Bark Pirates","Marine","Fire Tank Pirates","Drake Pirates","On Air Pirates","Beautiful Pirates","Marine","Hawkins Pirates","Barto Club","Fire Tank Pirates","New Fish-Man Pirates","Straw Hat Pirates","Chinjao Family","Tontatta Pirates","Straw Hat Pirates","New Giant Warrior Pirates","Ideo Pirates","Straw Hat Pirates","Buggy Pirates","Straw Hat Pirates","Yonta Maria Grand Fleet"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>power<\/th>\n      <th>character<\/th>\n      <th>level<\/th>\n      <th>affiliations<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":4,"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[4,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+.footnote[
+.small[
+Source: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+]
+]
+
+---
+class: inverse, center, middle
+
+# Time to practice!
+Wrangling the datasets, then visualising the most powerful characters in One Piece based on their ages.
+
+---
+
+
+
+# Plot
+.center[
+&lt;img src="01_Data_Wrangling_slide_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Animating bar plot
+.pull-left[ &lt;br&gt;
+&lt;blockquote class="twitter-tweet" data-width="300" data-theme="light" data-cards="hidden" data-dnt="true" align="center"&gt;&lt;p lang="in" dir="ltr"&gt;Visualisasi data tentang utang dan pendapatan per penduduk dengan menggunakan bahasa pemrograman R. Kode bisa dilihat pada tautan &lt;a href="https://t.co/YzqY3hmGfc"&gt;https://t.co/YzqY3hmGfc&lt;/a&gt;.&lt;br&gt;&lt;br&gt;Secara rasio, tidak berbeda jauh dengan data rasio utang pemerintah terhadap PDB seperti yang disampaikan &lt;a href="https://twitter.com/DJPPRkemenkeu?ref_src=twsrc%5Etfw"&gt;@DJPPRkemenkeu&lt;/a&gt;. &lt;a href="https://t.co/1D6k2nmHsW"&gt;pic.twitter.com/1D6k2nmHsW&lt;/a&gt;&lt;/p&gt;&amp;mdash; Arif P. Sulistiono (@arifpras) &lt;a href="https://twitter.com/arifpras/status/1256101386758115328?ref_src=twsrc%5Etfw"&gt;May 1, 2020&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+]
+
+.pull-right[
+&lt;img src="file:///Users/arifpras/OneDrive%20-%20The%20University%20of%20Nottingham/03_R/20200430/debt16.gif" style="width: 90%" align="left"&gt;
+]
+
+---
+# Animating line plot
+.pull-left[ &lt;br&gt;
+&lt;blockquote class="twitter-tweet" data-width="300" data-theme="light" data-cards="hidden" data-dnt="true" align="center"&gt;&lt;p lang="in" dir="ltr"&gt;Visualisasi data tentang pergerakan nilai tukar &lt;a href="https://twitter.com/hashtag/rupiah?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#rupiah&lt;/a&gt; terhadap dollar AS pada &lt;a href="https://twitter.com/hashtag/krisis?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#krisis&lt;/a&gt; 2008 dan tahun ini dengan menggunakan bahasa pemrograman &lt;a href="https://twitter.com/hashtag/R?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#R&lt;/a&gt;. Kode bisa dilihat pada tautan &lt;a href="https://t.co/YzqY3hmGfc"&gt;https://t.co/YzqY3hmGfc&lt;/a&gt;. &lt;a href="https://t.co/PMHFjWIJQB"&gt;pic.twitter.com/PMHFjWIJQB&lt;/a&gt;&lt;/p&gt;&amp;mdash; Arif P. Sulistiono (@arifpras) &lt;a href="https://twitter.com/arifpras/status/1257366542553055232?ref_src=twsrc%5Etfw"&gt;May 4, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+]
+
+.pull-right[
+&lt;img src="file:///Users/arifpras/OneDrive%20-%20The%20University%20of%20Nottingham/03_R/20200502/idr05.gif" style="width: 90%" align="left"&gt;
+]
+
+---
+
+class: center, middle
+
+.center[
+![:scale 60%](/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/Shanks Blocks Akainu - Imgur.gif)
+]
+
+.large[
+Thank you for listening!
+]
+
+.small[
+Slides created via the R packages:
+[**xaringan**](https://github.com/yihui/xaringan) and
+[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer). &lt;br&gt;
+The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%",
+"highlightStyle": "github",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
