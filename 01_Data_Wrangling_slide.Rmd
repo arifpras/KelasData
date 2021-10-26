@@ -167,7 +167,7 @@ exclude: `r if (requireNamespace("tibble", quietly=TRUE)) "false" else "true"`
 ```{r eval=requireNamespace("DT", quietly=TRUE)}
 library(readxl)
 op_ages <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ages")
-DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 4))
+DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
 .footnote[
@@ -183,7 +183,7 @@ exclude: `r if (requireNamespace("DT", quietly=TRUE)) "false" else "true"`
 ```{r eval=requireNamespace("DT", quietly=TRUE)}
 library(readxl)
 op_powers <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_powers")
-DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 4))
+DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
 .footnote[
@@ -269,7 +269,7 @@ op_powers %>%
 ]
 
 .pull-right[
-<img src="https://www.dropbox.com/s/v58tvspljgvr2wv/debt16.gif?dl=1" style="width: 90%" align="left">
+<img src="https://miro.medium.com/max/960/1*tKoVzc3cI9ihIuovTFf2jA.gif" style="width: 80%" align="left">
 ]
 
 ---
@@ -279,7 +279,7 @@ op_powers %>%
 ]
 
 .pull-right[
-<img src="https://www.dropbox.com/s/joa61rb9hj3youz/idr05.gif?dl=1" style="width: 90%" align="left">
+<img src="https://miro.medium.com/max/960/1*W58miPPhRcKO4dYf6eBqvw.gif" style="width: 80%" align="left">
 ]
 
 ---
@@ -287,7 +287,7 @@ op_powers %>%
 class: center, middle
 
 .center[
-![:scale 60%](https://www.dropbox.com/s/sk3w13drj61d0j0/Shanks%20Blocks%20Akainu%20-%20Imgur.gif?dl=1)
+![:scale 50%](https://qph.fs.quoracdn.net/main-qimg-e9805b884c59817513f29f56944651e9)
 ]
 
 .large[
