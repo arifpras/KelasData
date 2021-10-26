@@ -1,4 +1,4 @@
-All files are intended to be used in R courses organised by the Ministry of Finance - Data Analytics Community (github.com/mofdac):
+All files are intended to be used in R courses organised by the Ministry of Finance - Data Analytics Community (https://github.com/mofdac):
 - Data Wrangling, 28 October 2021
 - Data Visualisation, 4 November 2021
 - Basic Modelling, 11 November 2021
