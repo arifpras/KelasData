@@ -30,11 +30,11 @@ library(tidyr)
 #needs to be called individually
 library(readxl)
 
-easypackages::libraries("dplyr", "ggplot2", "tidyr", "readxl")
 #--install.packages("easypackages")
+easypackages::libraries("dplyr", "ggplot2", "tidyr", "readxl")
 
-pacman::p_load(dplyr, ggplot2, tidyr, readxl)
 #--install.packages("pacman")
+pacman::p_load(dplyr, ggplot2, tidyr, readxl)
 
 #pacman::p_load(tidylog, warn.conflicts = FALSE)
 library(tidylog, warn.conflicts = FALSE)

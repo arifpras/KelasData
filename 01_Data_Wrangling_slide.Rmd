@@ -38,6 +38,7 @@ library("xaringanExtra")
 #install.packages("webshot")
 #webshot::install_phantomjs()
 library("webshot")
+library("usethis")
 ```
 
 ```{r setup, include=FALSE}
@@ -75,9 +76,9 @@ xaringanExtra::use_extra_styles(
 xaringanExtra::use_progress_bar(color = "orange", location = "top")
 ```
 
-# About Me
+# About me
 .center[
-![:scale 50%](https://media.giphy.com/media/AMx5NSwJKQnsY/giphy.gif)
+![:scale 50%](https://pa1.narvii.com/5869/51088074557b4091944c2007ec33384020920f87_hq.gif)
 
 An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the Indonesia Endowment Fund for Education ("Lembaga Pengelola Dana Pendidikan"), at the moment, on study leave to join a PhD program in the <a href="https://www.nottingham.ac.uk/economics/people/arif.sulistiono">School of Economics, the University of Nottingham</a> with research interests in Indonesia's government bonds market and their bondholders' behaviour. Also a research assistant at <a href="https://www.tracktheeconomy.ac.uk/arif-sulistiono">tracktheconomy.ac.uk</a>. <br> <br>
 <a href="mailto:ap.sulistiono@gmail.com"><i class="fa fa-envelope fa-fw"></i></a></a> <a href="https://www.facebook.com/arifpras"> <i class="fa fa-facebook fa-fw"></i></a> <a href="https://github.com/arifpras"><i class="fa fa-github fa-fw"></i></a> <a href="https://www.instagram.com/arifpras"> <i class="fa fa-instagram fa-fw"></i></a> <a href="https://arifpras.medium.com/"> <i class="fa fa-medium fa-fw"></i></a> <a href="https://twitter.com/arifpras"> <i class="fa fa-twitter fa-fw"></i></a> <a href="https://arifpras.com"> <i class="fa fa-wordpress fa-fw"></i></a>
@@ -133,10 +134,10 @@ An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the 
 ]
 
 ---
-class: inverse center middle
+class: inverse, center, middle
 
 # %>%
-Pipe operator: ...then
+.large[Pipe operator: ...then]
 
 ---
 # Prequisites
@@ -147,11 +148,15 @@ rm(list=ls())
 ls()
 ```
 
+--
+
 ### Install the package & load the library
 ```{r eval=FALSE}
 install.packages("tidyverse")
 library(tidyverse)
 ```
+
+--
 
 ### Set the working directory
 ```{r eval=FALSE}
@@ -170,12 +175,6 @@ op_ages <- read_excel(path = "/Users/arifpras/OneDrive - The University of Notti
 DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
-.footnote[
-.small[
-Source: https://listfist.com/list-of-one-piece-characters-by-age
-]
-]
-
 ---
 exclude: `r if (requireNamespace("DT", quietly=TRUE)) "false" else "true"`
 # Data
@@ -186,17 +185,17 @@ op_powers <- read_excel(path = "/Users/arifpras/OneDrive - The University of Not
 DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
-.footnote[
-.small[
-Source: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
-]
-]
-
 ---
-class: inverse, center, middle
+class: center, inverse
 
-# Time to practice!
-Wrangling the datasets, then visualising the most powerful characters in One Piece based on their ages.
+.center[
+![:scale 50%](https://media.giphy.com/media/SUREsnI6v55CM/giphy.gif)
+]
+
+.large[<span style="color:orange"> **Time to practice!** </span>]
+
+<span style="color:white">Wrangling the datasets, then visualising
+the most powerful characters in One Piece based on their ages.</span>
 
 ---
 
@@ -284,14 +283,14 @@ op_powers %>%
 
 ---
 
-class: center, middle
+class: center, middle, clear
 
 .center[
 ![:scale 50%](https://qph.fs.quoracdn.net/main-qimg-e9805b884c59817513f29f56944651e9)
 ]
 
 .large[
-Thank you for listening!
+Thank you for listening.
 ]
 
 .small[
@@ -300,3 +299,21 @@ Slides created via the R packages:
 [gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer). <br>
 The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
 ]
+
+---
+
+# Acknowledgements
+
+*   Grolemund, G., & Wickham, H. (2017). R for Data Science. O’Reilly Media.
+*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686.
+*   ...and other sources i.e. stackoverflow.com, github.com, etc.
+
+### Datasets:
+*   Characters' age: https://listfist.com/list-of-one-piece-characters-by-age
+*   Characters' power: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+
+### GIF files:
+*   Luffy: https://pa1.narvii.com/5869/51088074557b4091944c2007ec33384020920f87_hq.gif
+*   Zoro vs. Pacifista: https://media.giphy.com/media/SUREsnI6v55CM/giphy.gif
+*   Shanks vs. Akainu: https://www.quora.com/What-would-happen-if-Deku-was-sent-to-the-One-Piece-universe
