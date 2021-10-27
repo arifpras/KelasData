@@ -36,7 +36,7 @@ easypackages::libraries("dplyr", "ggplot2", "tidyr", "readxl")
 pacman::p_load(dplyr, ggplot2, tidyr, readxl)
 #--install.packages("pacman")
 
-#pacman::p_load(tidylog)
+#pacman::p_load(tidylog, warn.conflicts = FALSE)
 library(tidylog, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 ```
@@ -106,24 +106,27 @@ glimpse(op_powers)
 glimpse(op_ages)
 ```
 
-```{r filter}
+```{r filtering}
 op_powers %>% 
   filter(affiliations == "Marine")
+
+op_powers %>% 
+  stats::filter(affiliations == "Marine")
 ```
 
-```{r arrange}
+```{r arranging}
 op_powers %>% 
   arrange(desc(affiliations))
 ```
 
-```{r recode}
+```{r recoding}
 law <- op_powers %>% 
   mutate(character = 
            recode(character, 
                   "Trafalgar D. Water Law" = "Trafalgar D. Law"))
 ```
 
-```{r slice}
+```{r slicing}
 op_powers %>% 
   slice(10L)
 
@@ -166,7 +169,7 @@ op_powers %>%
   slice_head(prop = 0.5)
 ```
 
-```{r select}
+```{r selecting}
 op_powers %>% 
   select(character, affiliations)
 
@@ -174,28 +177,28 @@ op_powers %>%
   select(-level)
 ```
 
-```{r relocate}
+```{r relocating}
 op_powers %>% 
   relocate(character, power, affiliations)
 ```
 
-```{r rename}
+```{r renaming}
 status <- op_powers %>% 
   rename("status" = "level")
 ```
 
-```{r count}
+```{r counting}
 op_powers %>% 
   filter(affiliations == "Marine") %>% 
   count()
 ```
 
-```{r mutate}
+```{r mutating}
 op_powers %>% 
   mutate(anime = "One Piece")
 ```
 
-```{r transmute}
+```{r transmuting}
 op_powers %>% 
   transmute(anime = "One Piece")
 ```
@@ -210,7 +213,7 @@ op_powers %>%
   select(character, affiliations, rank)
 ```
 
-```{r summarise}
+```{r summarising}
 op_powers %>% 
   arrange(affiliations, desc(power)) %>% 
   group_by(affiliations) %>% 
@@ -227,7 +230,7 @@ op_powers %>%
   summarise(total = sum(fase1, fase2))
 ```
 
-```{r}
+```{r df-villain}
 villain_aff <- data.frame(
   character = c("Marshall D. Teach", "Charlotte Linlin", "Kaido", "Sakazuki Akainu", "Borsalino Kizaru"),
   affiliation = c("Blackbeard Pirates", "Big Mom Pirates", "Beasts Pirates", "Marine", "Marine")
@@ -281,7 +284,7 @@ op_powers %>%
   mutate(villain = ifelse(affiliations == "Blackbeard Pirates", "Villain", "NA"))
 ```
 
-```{r luffy}
+```{r df-luffy}
 luffy00 <- tribble(
   ~arc, ~power,
   "1-Punk Hazard", 75,
@@ -310,7 +313,7 @@ mean(luffy00$power, na.rm = TRUE)
 #sum(is.na(luffy00)) 
 ```
 
-```{r fill}
+```{r filling}
 luffy01 <- luffy00 %>%
   fill(power, .direction = "up") %>% 
   mutate(method = "fill")
@@ -329,14 +332,14 @@ luffy02 <- luffy00 %>%
 luffy02
 ```
 
-```{r interpolate}
+```{r interpolating}
 luffy03 <- luffy00 %>% 
   mutate(power = zoo::na.approx(power),
          method = "interpolate")
 luffy03
 ```
 
-```{r drop}
+```{r dropping}
 luffy00 %>% drop_na()
 ```
 
@@ -372,6 +375,12 @@ db01b
 db01c <- db01b %>% 
   pivot_wider(names_from = variable,
               values_from = value)
+```
+
+```{r importing}
+writexl::write_xlsx(x = list(db01aSheet = db01a, db01bSheet = db01b, db01cSheet = db01c), path = "OnePiece.xlsx")
+
+write.csv(db01a, file = "csv_db01a.csv")
 ```
 
 ```{r plot01a}
@@ -421,6 +430,8 @@ plot01a <- op_powers %>%
     caption = ""
   ) +
   scale_size_continuous(range = c(1,5))
+
+plot01a
 ```
 
 ```{r plot01b}
@@ -471,6 +482,8 @@ plot01b <- op_powers %>%
   ) +
   scale_size_continuous(range = c(1,5)) +
   facet_grid(.~level)
+
+plot01b
 ```
 
 ```{r plot02a}
@@ -521,6 +534,8 @@ plot02a <- op_powers %>%
     caption = ""
   ) +
   scale_size_continuous(range = c(1,5))
+
+plot02a
 ```
 
 ```{r plot02b}
@@ -572,6 +587,7 @@ plot02b <- op_powers %>%
   ) +
   scale_size_continuous(range = c(1,5)) +
   facet_grid(.~level)
+
 plot02b
 ```
 
