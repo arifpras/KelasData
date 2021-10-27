@@ -1,7 +1,7 @@
 ---
 title: "01_Data_Wrangling"
 author: '@arifpras'
-date: "25/10/2021"
+date: "28/10/2021"
 output: html_document
 ---
 
@@ -22,9 +22,12 @@ install.packages("ggplot2")
 install.packages("tidyr")
 install.packages("readxl")
 
+#including when we call for library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+
+#needs to be called individually
 library(readxl)
 
 easypackages::libraries("dplyr", "ggplot2", "tidyr", "readxl")
@@ -41,7 +44,7 @@ library(dplyr, warn.conflicts = FALSE)
 ```{r directory}
 #setting working directory
 getwd()
-setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData")
+setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData")
 dir()
 ```
 
@@ -55,26 +58,26 @@ dir()
 #".csv" files - local
 
 #op_chapters <- read.csv(file.choose())
-#op_chapters <- read.csv("OP_chapters.csv")
+#op_chapters <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_chapters.csv")
 
 #op_characters <- read.csv(file.choose())
-#op_characters <- read.csv("OP_characters.csv")
+#op_characters <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_characters.csv")
 
 #op_ratings <- read.csv(file.choose())
-#op_ratings <- read.csv("OP_ratings.csv")
+#op_ratings <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_ratings.csv")
 
 op_powers <- read.csv(file.choose())
-op_powers <- read.csv("OP_powers.csv")
+op_powers <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_powers.csv")
 
 op_ages <- read.csv(file.choose())
-op_ages <- read.csv("OP_ages.csv")
+op_ages <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_ages.csv")
 
 #".xlsx" files - local
-#op_chapters <- read_excel(path = "OP_all.xlsx", sheet = "OP_chapters")
-#op_characters <- read_excel(path = "OP_all.xlsx", sheet = "OP_characters")
-#op_ratings <- read_excel(path = "OP_all.xlsx", sheet = "OP_ratings")
-op_powers <- read_excel(path = "OP_all.xlsx", sheet = "OP_powers")
-op_ages <- read_excel(path = "OP_all.xlsx", sheet = "OP_ages")
+#op_chapters <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_chapters")
+#op_characters <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_characters")
+#op_ratings <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ratings")
+op_powers <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_powers")
+op_ages <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ages")
 
 #".csv" files - cloud
 #op_chapters <- read.csv("https://www.dropbox.com/s/t1vrxsa4ad0m2c4/OP_chapters.csv?dl=1")
@@ -133,10 +136,10 @@ op_powers %>%
 
 ```{r slice-min}
 op_powers %>% 
-  slice_min(power, n = 5, with_ties = FALSE)
+  slice_min(character, n = 5, with_ties = FALSE)
 
 op_powers %>% 
-  slice_min(power, prop = 0.5, with_ties = TRUE)
+  slice_min(character, prop = 0.5, with_ties = TRUE)
 ```
 
 ```{r slice-tail}
@@ -149,10 +152,10 @@ op_powers %>%
 
 ```{r slice-max}
 op_powers %>% 
-  slice_max(power, n = 5, with_ties = FALSE)
+  slice_max(affiliations, n = 5, with_ties = FALSE)
 
 op_powers %>% 
-  slice_max(power, prop = 0.5, with_ties = TRUE)
+  slice_max(affiliations, prop = 0.5, with_ties = TRUE)
 ```
 
 ```{r slice-head}
@@ -202,7 +205,7 @@ op_powers %>%
   arrange(affiliations, desc(power)) %>% 
   group_by(affiliations) %>% 
   mutate(rank = row_number()) %>% 
-  ungroup() %>% 
+  ungroup() %>% #close the group_by()
   arrange(affiliations) %>% 
   select(character, affiliations, rank)
 ```
@@ -211,7 +214,8 @@ op_powers %>%
 op_powers %>% 
   arrange(affiliations, desc(power)) %>% 
   group_by(affiliations) %>% 
-  summarise(avg = mean(power, na.rm = TRUE)) %>% 
+  summarise(avg = mean(power, na.rm = TRUE),
+            n = n()) %>%
   ungroup()
 ```
 
@@ -223,34 +227,53 @@ op_powers %>%
   summarise(total = sum(fase1, fase2))
 ```
 
-```{r left-join}
-op_powers %>% 
-  left_join(op_ages, by = c("character" = "name"))
+```{r}
+villain_aff <- data.frame(
+  character = c("Marshall D. Teach", "Charlotte Linlin", "Kaido", "Sakazuki Akainu", "Borsalino Kizaru"),
+  affiliation = c("Blackbeard Pirates", "Big Mom Pirates", "Beasts Pirates", "Marine", "Marine")
+)
+
+character_power <- data.frame(
+  name = c("Marshall D. Teach", "Kaido", "Sakazuki Akainu", "Monkey D. Dragon", "Silvers Rayleigh"),
+  power = c(100, 100, 95, 99, 93)
+)
 ```
 
-```{r inner-join}
-op_powers %>% 
-  inner_join(op_ages, by = c("character" = "name"))
+
+```{r left-join}
+#mutating joins
+villain_aff %>% 
+  left_join(character_power, by = c("character" = "name"))
 ```
 
 ```{r right-join}
-op_powers %>% 
-  right_join(op_ages, by = c("character" = "name"))
+#mutating joins
+villain_aff %>% 
+  right_join(character_power, by = c("character" = "name"))
+```
+
+```{r inner-join}
+#mutating joins
+villain_aff %>% 
+  inner_join(character_power, by = c("character" = "name"))
 ```
 
 ```{r full-join}
-op_powers %>% 
-  full_join(op_ages, by = c("character" = "name"))
+#mutating joins
+villain_aff %>% 
+  full_join(character_power, by = c("character" = "name"))
 ```
 
 ```{r semi-join}
-op_powers %>% 
-  semi_join(op_ages, by = c("character" = "name"))
+#filtering joins
+villain_aff %>% 
+  semi_join(character_power, by = c("character" = "name"))
 ```
 
 ```{r anti-join}
-op_powers %>% 
-  anti_join(op_ages, by = c("character" = "name"))
+#filtering joins
+villain_aff %>% 
+  anti_join(character_power, by = c("character" = "name"))
 ```
 
 ```{r ifelse}
@@ -259,11 +282,6 @@ op_powers %>%
 ```
 
 ```{r luffy}
-luffy00 <- data.frame(
-  arc = c("1-Punk Hazard", "2-Dressrosa", "3-Zou", "4-Whole Cake Island", "5-Levely", "6-Wano Country"),
-  power = c(75, NA, 80, 82, NA, 85)
-)
-
 luffy00 <- tribble(
   ~arc, ~power,
   "1-Punk Hazard", 75,
@@ -272,12 +290,12 @@ luffy00 <- tribble(
   "4-Whole Cake Island", 82,
   "5-Levely", NA
 )
-
 luffy00
 
 luffy00 <- luffy00 %>% 
   add_row(arc = "6- Wano Country",
           power = 85)
+luffy00
 
 is.na(luffy00)
 
@@ -294,7 +312,7 @@ mean(luffy00$power, na.rm = TRUE)
 
 ```{r fill}
 luffy01 <- luffy00 %>%
-  fill(power, .direction = "down") %>% 
+  fill(power, .direction = "up") %>% 
   mutate(method = "fill")
 
 luffy01
@@ -307,7 +325,7 @@ luffy02 <- luffy00 %>%
     method = "mean"
     )
 
-#luffy$power[is.na(luffy$power)] <- mean(luffy$power, na.rm = TRUE)
+#luffy02$power[is.na(luffy02$power)] <- mean(luffy02$power, na.rm = TRUE)
 luffy02
 ```
 
@@ -315,6 +333,7 @@ luffy02
 luffy03 <- luffy00 %>% 
   mutate(power = zoo::na.approx(power),
          method = "interpolate")
+luffy03
 ```
 
 ```{r drop}
@@ -336,23 +355,27 @@ luffy05 <- luffy01 %>%
 ```
 
 ```{r piv-long}
-db01 <-  op_powers %>%
+db01a <-  op_powers %>%
   left_join(op_ages, by = c("character" = "name")) %>% 
   select(-level) %>% 
-  relocate(character, affiliations, power, age) %>% 
+  relocate(character, affiliations, power, age)
+db01a
+
+db01b <- db01a %>% 
   pivot_longer(cols = power:age, 
                names_to = "variable", 
                values_to = "value")
+db01b
 ```
 
 ```{r piv-wider}
-db00 <- db01 %>% 
+db01c <- db01b %>% 
   pivot_wider(names_from = variable,
               values_from = value)
 ```
 
-```{r plot01}
-plot01 <- op_powers %>% 
+```{r plot01a}
+plot01a <- op_powers %>% 
   left_join(op_ages, by = c("character" = "name")) %>% 
   relocate(character, age, power) %>% 
   #group_by(level) %>% 
@@ -400,8 +423,58 @@ plot01 <- op_powers %>%
   scale_size_continuous(range = c(1,5))
 ```
 
-```{r plot02}
-plot02 <- op_powers %>% 
+```{r plot01b}
+plot01b <- op_powers %>% 
+  left_join(op_ages, by = c("character" = "name")) %>% 
+  relocate(character, age, power) %>% 
+  #group_by(level) %>% 
+  slice_max(power, n = 15, with_ties = FALSE) %>%
+  #ungroup() %>% 
+  ggplot(aes(x = reorder(character, power), 
+             y = age)) +
+  geom_point(aes(color = factor(affiliations), size = power)) +
+  coord_flip() +
+  nord::scale_color_nord("aurora") +
+  xlab("") +
+  ylab("Age") +
+  theme_test() +
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_text(size = 11),
+    axis.line.y = element_blank(),
+    axis.title.y = element_text(size = 11),
+    axis.text.y = element_text(size = 12),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 11),
+    legend.key.size = unit(0.5, "cm"),
+    legend.spacing = unit(1, "cm"),
+    plot.title = element_text(
+      hjust = 0, size = 18, face = "bold"
+    ),
+    plot.subtitle = element_text(hjust = 0, size = 17),
+    plot.caption = element_text(hjust = 0, size = 11),
+    # legend.title = element_blank(),
+    legend.position = "right",
+    strip.text.x = element_text(size = 8),
+    panel.grid.major.y = element_line(colour = "grey97"),
+    panel.ontop = FALSE
+  ) +
+  guides(size = guide_legend("Power"), color = guide_legend("Affiliation")) +
+  labs(
+    title = "The top 15-most powerful characters",
+    subtitle = "",
+    caption = ""
+  ) +
+  scale_size_continuous(range = c(1,5)) +
+  facet_grid(.~level)
+```
+
+```{r plot02a}
+plot02a <- op_powers %>% 
   left_join(op_ages, by = c("character" = "name")) %>% 
   relocate(character, age, power) %>% 
   #group_by(level) %>% 
@@ -448,4 +521,62 @@ plot02 <- op_powers %>%
     caption = ""
   ) +
   scale_size_continuous(range = c(1,5))
+```
+
+```{r plot02b}
+plot02b <- op_powers %>% 
+  left_join(op_ages, by = c("character" = "name")) %>% 
+  relocate(character, age, power) %>% 
+  #group_by(level) %>% 
+  slice_max(power, n = 15, with_ties = FALSE) %>%
+  #ungroup() %>% 
+  ggplot(aes(x = reorder(character, power), 
+             y = factor(affiliations))) +
+  geom_point(aes(color = age, size = power)) +
+  coord_flip() +
+  #nord::scale_color_nord("victory_bonds", discrete = FALSE) +
+  viridis::scale_colour_viridis(option = "viridis", direction = -1) +
+  xlab("") +
+  ylab("") +
+  theme_test() +
+  theme(
+    axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust=1),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_text(size = 11),
+    axis.line.y = element_blank(),
+    axis.title.y = element_text(size = 11),
+    axis.text.y = element_text(size = 12),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 11),
+    legend.key.size = unit(0.5, "cm"),
+    legend.spacing = unit(1, "cm"),
+    plot.title = element_text(
+      hjust = 0, size = 18, face = "bold"
+    ),
+    plot.subtitle = element_text(hjust = 0, size = 17),
+    plot.caption = element_text(hjust = 0, size = 11),
+    # legend.title = element_blank(),
+    legend.position = "right",
+    strip.text.x = element_text(size = 8),
+    panel.grid.major.y = element_line(colour = "grey97"),
+    panel.ontop = FALSE
+  ) +
+  guides(size = guide_legend("Power"), color = guide_colorbar("Age")) +
+  labs(
+    title = "The top 15-most powerful characters",
+    subtitle = "",
+    caption = ""
+  ) +
+  scale_size_continuous(range = c(1,5)) +
+  facet_grid(.~level)
+plot02b
+```
+
+```{r clearing, include = FALSE}
+#clearing the environment
+ls()
+rm(list=ls())
 ```
