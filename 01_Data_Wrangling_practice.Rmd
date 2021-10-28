@@ -76,7 +76,7 @@ op_ages <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_
 #op_chapters <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_chapters")
 #op_characters <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_characters")
 #op_ratings <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ratings")
-op_powers <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_powers")
+op_powers <- readxl::read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = 4)
 op_ages <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ages")
 
 #".csv" files - cloud
@@ -107,28 +107,28 @@ glimpse(op_ages)
 ```
 
 ```{r filtering}
-op_powers %>% 
-  filter(affiliations == "Marine")
+db01 <- op_powers %>% 
+  dplyr::filter(affiliations == "Marine")
 
 op_powers %>% 
   stats::filter(affiliations == "Marine")
 ```
 
 ```{r arranging}
-op_powers %>% 
-  arrange(desc(affiliations))
+db02 <- op_powers %>%
+  arrange(desc(character))
 ```
 
 ```{r recoding}
 law <- op_powers %>% 
-  mutate(character = 
+  mutate(character02 = 
            recode(character, 
                   "Trafalgar D. Water Law" = "Trafalgar D. Law"))
 ```
 
 ```{r slicing}
 op_powers %>% 
-  slice(10L)
+  slice(56L)
 
 op_powers %>% 
   slice(n())
@@ -170,15 +170,15 @@ op_powers %>%
 ```
 
 ```{r selecting}
-op_powers %>% 
+db03 <- op_powers %>%
   select(character, affiliations)
 
-op_powers %>% 
+db04 <- op_powers %>% 
   select(-level)
 ```
 
 ```{r relocating}
-op_powers %>% 
+db05 <- op_powers %>% 
   relocate(character, power, affiliations)
 ```
 
@@ -194,17 +194,19 @@ op_powers %>%
 ```
 
 ```{r mutating}
-op_powers %>% 
-  mutate(anime = "One Piece")
+db06 <- op_powers %>% 
+  mutate(anime = "One Piece",
+         power_2 = power/2)
 ```
 
 ```{r transmuting}
-op_powers %>% 
-  transmute(anime = "One Piece")
+db07 <- op_powers %>% 
+  transmute(anime = "One Piece",
+            power_2 = power/2)
 ```
 
 ```{r group-by}
-op_powers %>% 
+db08 <- op_powers %>% 
   arrange(affiliations, desc(power)) %>% 
   group_by(affiliations) %>% 
   mutate(rank = row_number()) %>% 
@@ -214,7 +216,7 @@ op_powers %>%
 ```
 
 ```{r summarising}
-op_powers %>% 
+db09 <- op_powers %>% 
   arrange(affiliations, desc(power)) %>% 
   group_by(affiliations) %>% 
   summarise(avg = mean(power, na.rm = TRUE),
@@ -223,10 +225,12 @@ op_powers %>%
 ```
 
 ```{r row-wise}
-op_powers %>% 
+db10a <- op_powers %>%
   mutate(fase1 = power*0.25,
-         fase2 = power*0.75) %>% 
-  rowwise(character) %>% 
+         fase2 = power*0.75)
+
+db10b <- db10a %>% 
+  rowwise(character) %>%
   summarise(total = sum(fase1, fase2))
 ```
 
@@ -246,7 +250,7 @@ character_power <- data.frame(
 ```{r left-join}
 #mutating joins
 villain_aff %>% 
-  left_join(character_power, by = c("character" = "name"))
+  left_join(character_power, by = c("name" = "name"))
 ```
 
 ```{r right-join}
@@ -280,7 +284,7 @@ villain_aff %>%
 ```
 
 ```{r ifelse}
-op_powers %>% 
+db11 <- op_powers %>% 
   mutate(villain = ifelse(affiliations == "Blackbeard Pirates", "Villain", "NA"))
 ```
 
@@ -309,8 +313,8 @@ mean(luffy00$power)
 mean(luffy00$power, na.rm = TRUE)
 
 #vector
-#which(is.na(luffy00))
-#sum(is.na(luffy00)) 
+which(is.na(luffy00))
+sum(is.na(luffy00)) 
 ```
 
 ```{r filling}
