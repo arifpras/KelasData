@@ -1,0 +1,121 @@
+---
+title: "99_Web_Scrapping"
+author: '@arifpras'
+date: "28/10/2021"
+output: html_document
+---
+
+```{r clearing, include = FALSE}
+#clearing the environment
+rm(list=ls())
+ls()
+```
+
+```{r directory}
+#setting working directory
+getwd()
+setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData")
+dir()
+```
+
+```{r packages}
+#installing packages
+pacman::p_load(tidyverse, readxl, rvest)
+```
+
+```{r source}
+#https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/
+```
+
+```{r url}
+url01 <- "https://listfist.com/list-of-one-piece-manga-chapters"
+
+link01 <- read_html(url01)
+
+str(link01)
+```
+
+```{r children}
+db01 <- link01 %>% 
+ html_node("body") %>% 
+ html_children()
+
+db01
+```
+
+```{r chapter}
+#Using CSS selectors to scrape the chapter number
+chapter_number_html <- html_nodes(link01,'.col-1')
+
+#Converting the chapter number to text
+chapter_number <- html_text(chapter_number_html)
+
+#Let's have a look at the chapter_number
+head(chapter_number)
+chapter_number <- chapter_number[-1]
+chapter_number <- as.numeric(chapter_number)
+```
+
+```{r title}
+#Using CSS selectors to scrape the title section
+title_data_html <- html_nodes(link01,'.col-2')
+
+#Converting the title data to text
+title_data <- html_text(title_data_html)
+
+#Let's have a look at the title
+head(title_data)
+
+#Data-Preprocessing: removing '\n'
+title_data <- gsub("\n", "", title_data)
+title_data <- gsub("\\", "\\\\", title_data, fixed = TRUE)
+#title_data <- str_replace(title_data, "\\\\", "")
+#write(gsub("\\", "\\\\", title_data, fixed = TRUE), "backslash.txt")
+
+#title_data <- gsub("[^A-Za-z0-9]", "", title_data) #remove all besides the alphabets & numbers
+
+#Let's have another look at the title
+head(title_data)
+title_data <- title_data[-1]
+```
+
+```{r release-date}
+#Using CSS selectors to scrape the release date section
+release_date_html <- html_nodes(link01,'.col-3')
+
+#Converting the release date to text
+release_date <- html_text(release_date_html)
+
+#Let's have a look at the release date
+head(release_date)
+release_date <- release_date[-1]
+release_date <- as.Date(release_date, "%B %d, %Y")
+class(release_date)
+```
+
+```{r pages}
+#Using CSS selectors to scrape the release date section
+pages_html <- html_nodes(link01,'.col-4')
+
+#Converting the release date to text
+pages <- html_text(pages_html)
+
+#Let's have a look at the release date
+head(pages)
+pages <- pages[-1]
+class(pages)
+pages <- as.numeric(pages)
+```
+
+```{r data-frame}
+manga <- data.frame(
+  chapter = chapter_number,
+  title = title_data,
+  release = release_date,
+  pages = pages
+)
+
+write.csv(manga, file = "OP_manga.csv")
+
+xlsx::write.xlsx2(as.data.frame(manga), file = "OP_all.xlsx", sheetName = "OP_manga", append = TRUE, row.Names = FALSE)
+```

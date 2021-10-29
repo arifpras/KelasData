@@ -1,0 +1,163 @@
+---
+title: "99_Web_Scrapping_volumes"
+author: '@arifpras'
+date: "29/10/2021"
+output: html_document
+---
+
+```{r clearing, include = FALSE}
+#clearing the environment
+rm(list=ls())
+ls()
+```
+
+```{r directory}
+#setting working directory
+getwd()
+setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData")
+dir()
+```
+
+```{r packages}
+#installing packages
+pacman::p_load(tidyverse, readxl, rvest)
+```
+
+```{r source}
+#https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/
+```
+
+```{r url}
+url01 <- "https://listfist.com/list-of-one-piece-volumes"
+
+link01 <- read_html(url01)
+
+str(link01)
+```
+
+```{r children}
+db01 <- link01 %>% 
+ html_node("body") %>% 
+ html_children()
+
+db01
+```
+
+```{r volume}
+#Using CSS selectors to scrape the volume number
+volume_number_html <- html_nodes(link01,'.col-1')
+
+#Converting the chapter number to text
+volume_number <- html_text(volume_number_html)
+
+#Let's have a look at the volume_number
+head(volume_number)
+volume_number <- volume_number[-1]
+volume_number <- as.numeric(volume_number)
+```
+
+```{r title}
+#Using CSS selectors to scrape the title section
+title_data_html <- html_nodes(link01,'.col-2')
+
+#Converting the title data to text
+title_data <- html_text(title_data_html)
+
+#Let's have a look at the title
+head(title_data)
+
+#Data-Preprocessing: removing '\n'
+title_data <- gsub("\n", "", title_data)
+title_data <- gsub("\\", "\\\\", title_data, fixed = TRUE)
+#title_data <- str_replace(title_data, "\\\\", "")
+#write(gsub("\\", "\\\\", title_data, fixed = TRUE), "backslash.txt")
+
+#title_data <- gsub("[^A-Za-z0-9]", "", title_data) #remove all besides the alphabets & numbers
+
+#Let's have another look at the title
+head(title_data)
+title_data <- title_data[-1]
+```
+
+```{r release-date}
+#Using CSS selectors to scrape the release date section
+release_date_html <- html_nodes(link01,'.col-3')
+
+#Converting the release date to text
+release_date <- html_text(release_date_html)
+
+#Let's have a look at the release date
+head(release_date)
+release_date <- release_date[-1]
+release_date
+class(release_date)
+Sys.Date()
+
+release_date <- lubridate::mdy(release_date)
+#release_date <- anytime::anydate(release_date)
+#release_date <- as.Date(release_date, "%B %d, %Y")
+class(release_date)
+```
+
+```{r pages}
+#Using CSS selectors to scrape the pages section
+pages_html <- html_nodes(link01,'.col-4')
+
+#Converting the pages to text
+pages <- html_text(pages_html)
+
+#Let's have a look at the pages
+head(pages)
+pages <- pages[-1]
+class(pages)
+pages <- as.numeric(pages)
+```
+
+```{r chapters}
+#Using CSS selectors to scrape the chapters section
+chapters_html <- html_nodes(link01,'.col-5')
+
+#Converting the chapters to text
+chapters <- html_text(chapters_html)
+
+#Let's have a look at the chapters
+head(chapters)
+chapters <- chapters[-1]
+class(chapters)
+chapters <- as.numeric(chapters)
+```
+
+
+```{r data-frame}
+volumes <- data.frame(
+  volume = volume_number,
+  title = title_data,
+  release = release_date,
+  pages = pages,
+  chapters = chapters
+)
+
+write.csv(volumes, file = "OP_volumes.csv")
+
+xlsx::write.xlsx2(as.data.frame(volumes), file = "OP_all.xlsx", sheetName = "OP_volumes", append = TRUE, row.Names = FALSE)
+```
+
+```{r vix}
+vix00 <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/vix_adjusted.csv")
+
+vix00$Date <- lubridate::dmy(vix00$Date)
+class(vix00$Date)
+
+vix01 <- vix00 %>% 
+  arrange(Date) %>% 
+  select(Date, Adj.Close) %>% 
+  mutate(vixi_avg = RcppRoll::roll_meanl(Adj.Close, n = 30, fill = NA, na.rm = TRUE))
+
+volumes08 <- volumes %>%
+  left_join(vix01, by = c("release" = "Date")) %>% 
+  select(-Adj.Close) %>% 
+  filter(!is.na(vixi_avg))
+
+xlsx::write.xlsx2(as.data.frame(volumes08), file = "OP_all.xlsx", sheetName = "OP_volumes2008", append = TRUE, row.Names = FALSE)
+```
+
