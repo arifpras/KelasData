@@ -1,3 +1,5 @@
+#Link: https://arifpras.medium.com/utang-melulu-2-265a0ea7afaf
+
 library(ggplot2)
 library(gifski)
 library(gganimate)
@@ -153,5 +155,3 @@ animate(
   rewind = TRUE
 )
 anim_save("debt01.gif", animation = last_animation(), overwrite = TRUE)
-
-#Link: https://arifpras.medium.com/utang-melulu-2-265a0ea7afaf
