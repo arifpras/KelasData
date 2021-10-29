@@ -1,3 +1,5 @@
+# Link: https://arifpras.medium.com/dua-dari-tiga-9a4f1a9408c0
+
 #Building database: a wide-table
 #Data source: Yahoo Finance for idrusd2008 and Bank Indonesia for idrusd2020.
 setAs("character", "Date01", function(from)
@@ -288,7 +290,7 @@ animate(
 anim_save("idr01.gif", animation = last_animation(), overwrite = TRUE)
 
 #Note:
-##a 480x480 resolution is enough if we would like to upload the gif-file on the website and twitter. But, if we intend to post on instagram and facebook, we need to have at least a 1080x1080 resolution. Below is my recommendation for the rendering process (it takes around 30 minutes):
+##A 480x480 resolution is enough if we would like to upload the gif-file on the website and twitter. But, if we intend to post on instagram and facebook, we need to have at least a 1080x1080 resolution. Below is my recommendation for the rendering process (it takes around 30 minutes):
 animate(
   plot06,
   width = 1080,
@@ -303,5 +305,3 @@ anim_save("idr02.gif", animation = last_animation(), overwrite = TRUE)
 ##Further, since it is not possible to upload a gif-file on instagram, firstly I convert the gif-file to be a mp4-file using an android-app called 'GIF Maker-Editor'. Secondly, to preserve the video quality of the plot, I convert the result of the previous conversion to be another mp4-file using another android-app called 'inShot' and choose the highest resolution (1080) when save the file.
 
 ##Now, you are ready to upload the plot on instagram and facebook without worrying to much about its quality.
-
-# Link: https://arifpras.medium.com/dua-dari-tiga-9a4f1a9408c0
