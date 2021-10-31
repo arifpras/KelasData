@@ -4,10 +4,11 @@ All files are intended to be used in R courses organised by the Ministry of Fina
 - Basic Modelling, 11 November 2021
 
 Added additional files on 29 Oct. 2021:
+- Utilising _xaringan_ package to create the presentation: 01_Data_Wrangling_slide.Rmd
 - Animating lineplot: 98_animating_lineplot_rupiah.R
 - Animating barplot: 98_animating_barplot_debt.R
-- Web scrapping One Piece by volume, then combining them with VIX index data: 99_Web_Scrapping_volumes.Rmd
-- Web scrapping One Piece by chapter: 99_Web_Scrapping_chapters.Rmd
+- Web-scrapping One Piece by volume, then combining them with VIX index data: 99_Web_Scrapping_volumes.Rmd
+- Web-scrapping One Piece by chapter: 99_Web_Scrapping_chapters.Rmd
 
 Data sources:
 - One Piece chapter and character: https://www.kaggle.com/michau96
