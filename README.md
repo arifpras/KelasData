@@ -3,6 +3,9 @@ All files are intended to be used in R courses organised by the Ministry of Fina
 - Data Visualisation, 4 November 2021
 - Basic Modelling, 11 November 2021
 
+The html format of the practice session could be seen on: 
+- Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/
+
 Added additional files on 29 Oct. 2021:
 - Utilising _xaringan_ package to create the presentation: 01_Data_Wrangling_slide.Rmd
 - Animating lineplot: 98_animating_lineplot_rupiah.R
