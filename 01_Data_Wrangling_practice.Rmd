@@ -5,7 +5,7 @@ date: "28/10/2021"
 output: html_document
 ---
 
-```{r clearing, include = FALSE}
+```{r clearing-init, include = FALSE}
 #clearing the environment
 rm(list=ls())
 ls()
@@ -595,7 +595,7 @@ plot02b <- op_powers %>%
 plot02b
 ```
 
-```{r clearing, include = FALSE}
+```{r clearing-end, include = FALSE}
 #clearing the environment
 ls()
 rm(list=ls())
