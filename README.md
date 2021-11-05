@@ -1,7 +1,7 @@
 All files are intended to be used in R courses organised by the Ministry of Finance - Data Analytics Community (https://github.com/mofdac):
 - Data Wrangling, 28 October 2021: 01_Data_Wrangling_practice.Rmd :white_check_mark:
 - Data Visualisation, 4 November 2021 :white_check_mark:
-- Basic Modeling, 11 November 2021
+- Basic Modeling, 11 November 2021 :hourglass_flowing_sand:
 
 The presentation is available on https://arifpras.github.io/KelasData/ and https://arifpras.netlify.app/#1
 
