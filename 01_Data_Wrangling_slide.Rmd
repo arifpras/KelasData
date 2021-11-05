@@ -1,8 +1,8 @@
 ---
 title: "Statistics with R:"
-subtitle: "Data Wrangling"  
+subtitle: "Data Wrangling | Data Visualisation"
 author: 'Arif P. Sulistiono'
-date: '<br>Kelas Data on `r Sys.Date()`<br><a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>'
+date: '<br>Kelas Data on 28 October 2021 and 4 November 2021<br><a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>'
 output:
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts, custom.css]
@@ -123,7 +123,7 @@ An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the 
 .panel[.panel-name[3: Basic Modelling]
 .pull-left[
 ## .center[`r icons::fontawesome("cloud-meatball", style = "solid")`]
-* Loading the dataset: `read_csv()` or `read_excel()`, 
+* Loading the dataset: `read_csv()` or `read_excel()`,
 * Correlation: `Hmisc::rcorr(as.matrix())`
 * Summary: `stargazer()`
 * Linear regression: `lm()`, `lm_robust()`, `dynlm()`
@@ -140,7 +140,7 @@ class: inverse, center, middle
 .large[Pipe operator: ...then]
 
 ---
-# Prequisites
+# Prerequisites
 
 ### Clean the environment
 ```{r eval=FALSE}
@@ -186,16 +186,105 @@ DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
 ---
-class: center, inverse
+
+class: middle
+
+# Data wrangling
+
+```{r echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "100%", fig.align = "center", fig.retina = 3}
+
+knitr::include_url("https://arifpras.github.io/WranglingViz/")
+```
+
+.left[.footnote[.small[Source: https://arifpras.github.io/WranglingViz/]]]
+
+---
+class: inverse, center, middle
+
+# Data Visualisation
+
+---
+# Datasaurus
 
 .center[
-![:scale 50%](https://media.giphy.com/media/SUREsnI6v55CM/giphy.gif)
+![:scale 40%](https://raw.githubusercontent.com/Z3tt/DataViz-Teaching/master/Datasaurus/datasauRus.gif)
+
+Never trust summary statistics alone.
 ]
 
-.large[<span style="color:orange"> **Time to practice!** </span>]
+.footnote[.small[Source: `library(datasauRus)`; https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_42]]
+---
 
-<span style="color:white">Wrangling the datasets, then visualising
-the most powerful characters in One Piece based on their ages.</span>
+# ggplot2
+
+.pull-left[
+### .left[Basic elements:
+*   Data: `data = ...`
+*   Geometries: `geom_`
+*   Aesthetics: `aes(x = ..., y = ..., ...)`
+*   Scales: `scale_`
+*   Statistical transformations: `stat_`
+*   Coordinate system: `coord_`
+*   Facets: `facet_`
+*   Visual themes: `theme()`
+]
+]
+
+---
+
+class: middle
+
+# Decision trees
+
+```{r echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "100%", fig.align = "center", fig.retina = 3}
+
+knitr::include_url("https://www.data-to-viz.com/#portfolio")
+```
+
+.left[.footnote[.small[Source: https://www.data-to-viz.com]]]
+
+---
+
+# Assigning colors
+
+.panelset[
+
+.panel[
+.panel-name[1: Color palette]
+
+<center><img src="https://d33wubrfki0l68.cloudfront.net/c25e86bc59337d57b4e24c4bf80ecbb12db841f8/59edf/img/ggplot-tutorial/map-principles-color-schemes.png" width="1000px" /></center>
+
+<br><br><br><br><br><br><br><br>
+.footnote[.small[Source: "Hands-On Data Visualization" by Jack Dougherty & Ilya Ilyankou]]
+]
+
+.panel[
+.panel-name[2: Qualitative variables]
+
+<center><img src="https://d33wubrfki0l68.cloudfront.net/1336224150e3b2822a76db24f51728b41f0540f5/25251/img/ggplot-tutorial/nominal_ordinal_binary.png" height="400px" /></center>
+
+<br><br>
+.footnote[.small[Source: https://github.com/allisonhorst/stats-illustrations/]]
+]
+
+.panel[
+.panel-name[3: Quantitative variables]
+
+<center><img src="https://d33wubrfki0l68.cloudfront.net/f9c11a301f597b8e2e5a2f26c691b7c51450c7aa/754d3/img/ggplot-tutorial/continuous_discrete.png" height="400px" /></center>
+
+<br><br>
+.footnote[.small[Source: https://github.com/allisonhorst/stats-illustrations/]]
+]
+]
+
+---
+class: center, inverse, middle
+
+.center[
+![:scale 55%](https://media.giphy.com/media/rCdzKS756yiGs/giphy.gif)
+]
+<br>
+.large[<span style="color:orange"> Let's practice! </span>]
 
 ---
 
@@ -205,13 +294,13 @@ the most powerful characters in One Piece based on their ages.</span>
 #op_powers <- read_excel(path = "OP_all.xlsx", sheet = "OP_powers")
 
 library(tidyverse)
-op_powers %>% 
-  left_join(op_ages, by = c("character" = "name")) %>% 
-  relocate(character, age, power) %>% 
-  #group_by(level) %>% 
+op_powers %>%
+  left_join(op_ages, by = c("character" = "name")) %>%
+  relocate(character, age, power) %>%
+  #group_by(level) %>%
   slice_max(power, n = 10, with_ties = FALSE) %>%
-  #ungroup() %>% 
-  ggplot(aes(x = reorder(character, power), 
+  #ungroup() %>%
+  ggplot(aes(x = reorder(character, power),
              y = age)) +
   geom_point(aes(color = factor(affiliations), size = power)) +
   coord_flip() +
@@ -292,6 +381,7 @@ class: center, middle, clear
 .large[
 Thank you for listening.
 ]
+.small[**All teaching materials are available on https://github.com/arifpras/KelasData**]
 
 .small[
 Slides created via the R packages:
@@ -303,10 +393,12 @@ The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihu
 ---
 
 # Acknowledgements
-
+.small[
 *   Grolemund, G., & Wickham, H. (2017). R for Data Science. O’Reilly Media.
-*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
-*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686.
+*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/
+*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+*   Claus O. Wilke: Data Visualization in R, https://wilkelab.org/SDS375/
+*   Cedric Scherer's personal blog: https://www.cedricscherer.com/
 *   ...and other sources i.e. stackoverflow.com, github.com, etc.
 
 ### Datasets:
@@ -315,5 +407,6 @@ The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihu
 
 ### GIF files:
 *   Luffy: https://pa1.narvii.com/5869/51088074557b4091944c2007ec33384020920f87_hq.gif
-*   Zoro vs. Pacifista: https://media.giphy.com/media/SUREsnI6v55CM/giphy.gif
+*   Luffy vs. Doflamingo: https://media.giphy.com/media/rCdzKS756yiGs/giphy.gif
 *   Shanks vs. Akainu: https://www.quora.com/What-would-happen-if-Deku-was-sent-to-the-One-Piece-universe
+]

@@ -1,26 +1,51 @@
 ---
-title: "01_Data_Wrangling"
-author: '@arifpras'
-date: "28/10/2021"
-output: html_document
+title: "Data Wrangling & Visualisation"
+subtitle: 'Kelas Data R organised by <a href="https://www.instagram.com/mof.dac"> <i class="fab fa-instagram fa-fw"></i>mof.dac</a>'
+author: 'Arif P. Sulistiono / @arifpras'
+date: '28 October 2021 and 4 November 2021'
+output:
+  html_document:
+    df_print: paged
+    #self_contained: no
+    toc: true
+    toc_float: true
+    theme: lumen #united
+    highlight: tango
+    fig_caption: yes
+    css: style.css
+    number_sections: TRUE
+    includes:
+      after_body: footer.html
 ---
 
-```{r clearing-init, include = FALSE}
-#clearing the environment
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+***
+
+# Prerequisites
+
+## Materials
+Please visit https://github.com/arifpras/KelasData for the datasets and other relevant materials to be used during the sessions.
+
+## Clearing the environment
+```{r clearing-first, echo=TRUE}
 rm(list=ls())
 ls()
 ```
 
+## Packages and libraries
 ```{r packages, include = FALSE}
 #installing packages - all
-install.packages("tidyverse")
+#install.packages("tidyverse")
 library(tidyverse)
 
 #installing packages - separately
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("tidyr")
-install.packages("readxl")
+#install.packages("dplyr")
+#install.packages("ggplot2")
+#install.packages("tidyr")
+#install.packages("readxl")
 
 #including when we call for library(tidyverse)
 library(dplyr)
@@ -37,17 +62,28 @@ easypackages::libraries("dplyr", "ggplot2", "tidyr", "readxl")
 pacman::p_load(dplyr, ggplot2, tidyr, readxl)
 
 #pacman::p_load(tidylog, warn.conflicts = FALSE)
-library(tidylog, warn.conflicts = FALSE)
-library(dplyr, warn.conflicts = FALSE)
+#library(tidylog, warn.conflicts = FALSE)
+#library(dplyr, warn.conflicts = FALSE)
+
+#interactive plot
+library(plotly)
 ```
 
-```{r directory}
-#setting working directory
+```{r icon, include=FALSE}
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+```{r directory, echo=TRUE}
+#which directory at the moment
 getwd()
+
+#setting working directory
 setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData")
-dir()
+
+#dir()
 ```
 
+## Datasets
 ```{r onepiece}
 #sources:
 ##--https://www.kaggle.com/michau96
@@ -66,11 +102,11 @@ dir()
 #op_ratings <- read.csv(file.choose())
 #op_ratings <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_ratings.csv")
 
-op_powers <- read.csv(file.choose())
-op_powers <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_powers.csv")
+#op_powers <- read.csv(file.choose())
+#op_powers <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_powers.csv")
 
-op_ages <- read.csv(file.choose())
-op_ages <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_ages.csv")
+#op_ages <- read.csv(file.choose())
+#op_ages <- read.csv("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_ages.csv")
 
 #".xlsx" files - local
 #op_chapters <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_chapters")
@@ -83,55 +119,66 @@ op_ages <- read_excel(path = "/Users/arifpras/OneDrive - The University of Notti
 #op_chapters <- read.csv("https://www.dropbox.com/s/t1vrxsa4ad0m2c4/OP_chapters.csv?dl=1")
 #op_characters <- read.csv("https://www.dropbox.com/s/e74njw4iw7qfzbl/OP_characters.csv?dl=1")
 #op_ratings <- read.csv("https://www.dropbox.com/s/qvdhlnkyk02giuj/OP_ratings.csv?dl=1")
-op_powers <- read.csv("https://www.dropbox.com/s/t3gbzzscz438ecp/OP_powers.csv?dl=1")
-op_ages <- read.csv("https://www.dropbox.com/s/r24vzv7eyz35irr/OP_ages.csv?dl=1")
+#op_powers <- read.csv("https://www.dropbox.com/s/t3gbzzscz438ecp/OP_powers.csv?dl=1")
+#op_ages <- read.csv("https://www.dropbox.com/s/r24vzv7eyz35irr/OP_ages.csv?dl=1")
 
-require(devtools)
-install_github("Displayr/flipAPI")
-library(flipAPI)
+#require(devtools)
+#install_github("Displayr/flipAPI")
+#library(flipAPI)
 
 #".xlsx" files - cloud
 #op_chapters <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = 1)
 #op_characters <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_characters")
 #op_ratings <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = 3)
-op_powers <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_powers", want.data.frame = TRUE)
-op_ages <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_ages", want.data.frame = TRUE)
+#op_powers <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_powers", want.data.frame = TRUE)
+#op_ages <- flipAPI::DownloadXLSX("https://www.dropbox.com/s/5mev3xo0cd3tc61/OP_all.xlsx?dl=0", sheet = "OP_ages", want.data.frame = TRUE)
 ```
 
 ```{r checking}
 str(op_powers)
 str(op_ages)
 
+#or
+
 glimpse(op_powers)
 glimpse(op_ages)
 ```
 
+***
+
+# Data Wrangling
+
+## Filtering
 ```{r filtering}
-db01 <- op_powers %>% 
-  dplyr::filter(affiliations == "Marine")
-
 op_powers %>% 
-  stats::filter(affiliations == "Marine")
+  dplyr::filter(affiliations == "Marine")
 ```
 
+## Arranging
 ```{r arranging}
-db02 <- op_powers %>%
-  arrange(desc(character))
+op_powers %>%
+  arrange(character) #ascending, alphabetical order
+  #arrange(desc(character)) #descending, alphabetical order
 ```
 
+## Recoding
 ```{r recoding}
 law <- op_powers %>% 
   mutate(character02 = 
            recode(character, 
                   "Trafalgar D. Water Law" = "Trafalgar D. Law"))
+
+law %>% filter(affiliations == "Heart Pirates") %>% 
+  select(character, character02)
 ```
 
+## Slicing
 ```{r slicing}
 op_powers %>% 
-  slice(56L)
+  slice(18L) #variable number 18
 
 op_powers %>% 
-  slice(n())
+  slice(n()) #the last variable
 
 op_powers %>% 
   slice(50:n())
@@ -169,42 +216,60 @@ op_powers %>%
   slice_head(prop = 0.5)
 ```
 
+## Selecting
 ```{r selecting}
 db03 <- op_powers %>%
   select(character, affiliations)
+db03
 
 db04 <- op_powers %>% 
   select(-level)
+db04
 ```
 
+## Relocating
 ```{r relocating}
 db05 <- op_powers %>% 
   relocate(character, power, affiliations)
+db05
 ```
 
+## Renaming
 ```{r renaming}
 status <- op_powers %>% 
   rename("status" = "level")
+status
 ```
 
+## Counting
 ```{r counting}
 op_powers %>% 
   filter(affiliations == "Marine") %>% 
-  count()
+  count() %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
+## Mutating
 ```{r mutating}
 db06 <- op_powers %>% 
   mutate(anime = "One Piece",
          power_2 = power/2)
+
+db06
 ```
 
 ```{r transmuting}
 db07 <- op_powers %>% 
   transmute(anime = "One Piece",
             power_2 = power/2)
+
+db07
 ```
 
+## Grouping
 ```{r group-by}
 db08 <- op_powers %>% 
   arrange(affiliations, desc(power)) %>% 
@@ -213,8 +278,11 @@ db08 <- op_powers %>%
   ungroup() %>% #close the group_by()
   arrange(affiliations) %>% 
   select(character, affiliations, rank)
+
+db08
 ```
 
+## Summarising
 ```{r summarising}
 db09 <- op_powers %>% 
   arrange(affiliations, desc(power)) %>% 
@@ -222,6 +290,8 @@ db09 <- op_powers %>%
   summarise(avg = mean(power, na.rm = TRUE),
             n = n()) %>%
   ungroup()
+
+db09
 ```
 
 ```{r row-wise}
@@ -229,11 +299,16 @@ db10a <- op_powers %>%
   mutate(fase1 = power*0.25,
          fase2 = power*0.75)
 
+db10a
+
 db10b <- db10a %>% 
   rowwise(character) %>%
   summarise(total = sum(fase1, fase2))
+
+db10b
 ```
 
+## Dataset: Villain
 ```{r df-villain}
 villain_aff <- data.frame(
   character = c("Marshall D. Teach", "Charlotte Linlin", "Kaido", "Sakazuki Akainu", "Borsalino Kizaru"),
@@ -246,48 +321,77 @@ character_power <- data.frame(
 )
 ```
 
-
+## Joining
 ```{r left-join}
 #mutating joins
 villain_aff %>% 
-  left_join(character_power, by = c("name" = "name"))
+  left_join(character_power, by = c("character" = "name")) %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r right-join}
 #mutating joins
 villain_aff %>% 
-  right_join(character_power, by = c("character" = "name"))
+  right_join(character_power, by = c("character" = "name")) %>%
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r inner-join}
 #mutating joins
 villain_aff %>% 
-  inner_join(character_power, by = c("character" = "name"))
+  inner_join(character_power, by = c("character" = "name"))  %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left") 
 ```
 
 ```{r full-join}
 #mutating joins
 villain_aff %>% 
-  full_join(character_power, by = c("character" = "name"))
+  full_join(character_power, by = c("character" = "name"))  %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r semi-join}
 #filtering joins
 villain_aff %>% 
-  semi_join(character_power, by = c("character" = "name"))
+  semi_join(character_power, by = c("character" = "name")) %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r anti-join}
 #filtering joins
 villain_aff %>% 
-  anti_join(character_power, by = c("character" = "name"))
+  anti_join(character_power, by = c("character" = "name")) %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
+## Conditional "ifelse"
 ```{r ifelse}
-db11 <- op_powers %>% 
-  mutate(villain = ifelse(affiliations == "Blackbeard Pirates", "Villain", "NA"))
+(
+  db11 <- op_powers %>%
+    mutate(villain = ifelse(affiliations == "Blackbeard Pirates", "Villain",
+                            "NA"))
+)
 ```
 
+## Dataset: Luffy
 ```{r df-luffy}
 luffy00 <- tribble(
   ~arc, ~power,
@@ -297,12 +401,21 @@ luffy00 <- tribble(
   "4-Whole Cake Island", 82,
   "5-Levely", NA
 )
-luffy00
+
+kableExtra::kbl(luffy00) %>%
+    kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 
 luffy00 <- luffy00 %>% 
   add_row(arc = "6- Wano Country",
           power = 85)
-luffy00
+
+kableExtra::kbl(luffy00) %>%
+    kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+
 
 is.na(luffy00)
 
@@ -317,41 +430,62 @@ which(is.na(luffy00))
 sum(is.na(luffy00)) 
 ```
 
+## Treating "N/A"
 ```{r filling}
 luffy01 <- luffy00 %>%
   fill(power, .direction = "up") %>% 
   mutate(method = "fill")
 
-luffy01
+kableExtra::kbl(luffy01) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r na-mean}
-luffy02 <- luffy00 %>% 
+luffy02 <- luffy00 %>%
   mutate(
     power = replace(power, is.na(power), mean(power, na.rm = TRUE)),
     method = "mean"
     )
 
 #luffy02$power[is.na(luffy02$power)] <- mean(luffy02$power, na.rm = TRUE)
-luffy02
+kableExtra::kbl(luffy02) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r interpolating}
 luffy03 <- luffy00 %>% 
   mutate(power = zoo::na.approx(power),
          method = "interpolate")
-luffy03
+
+kableExtra::kbl(luffy03) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r dropping}
-luffy00 %>% drop_na()
+luffy00 %>% drop_na() %>% 
+  kableExtra::kbl() %>% 
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
+## Binding
 ```{r row-bind}
 luffy04 <- rbind(luffy01, luffy02, luffy03)
 
-luffy04 <- luffy01 %>% 
+luffy04 <- luffy01 %>%
   bind_rows(luffy02, luffy03)
+
+kableExtra::kbl(luffy04) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
 ```{r col-bind}
@@ -359,147 +493,681 @@ luffy05 <- cbind(luffy01, luffy02, luffy03)
 
 luffy05 <- luffy01 %>% 
   bind_cols(luffy02, luffy03)
+
+kableExtra::kbl(luffy05) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
 ```
 
+## Long-table
 ```{r piv-long}
-db01a <-  op_powers %>%
-  left_join(op_ages, by = c("character" = "name")) %>% 
-  select(-level) %>% 
-  relocate(character, affiliations, power, age)
-db01a
+# selecting variables
+(
+  db01a <-  op_powers %>%
+    left_join(op_ages, by = c("character" = "name")) %>%
+    select(-level) %>%
+    relocate(character, affiliations, power, age)
+)
 
-db01b <- db01a %>% 
-  pivot_longer(cols = power:age, 
-               names_to = "variable", 
-               values_to = "value")
-db01b
+# pivoting
+(
+  db01b <- db01a %>%
+    pivot_longer(cols = power:age,
+                 names_to = "variable",
+                 values_to = "value")
+)
 ```
 
-```{r piv-wider}
-db01c <- db01b %>% 
-  pivot_wider(names_from = variable,
-              values_from = value)
+## Wide-table
+```{r piv-wide}
+(
+  db01c <- db01b %>%
+    pivot_wider(names_from = variable,
+                values_from = value)
+)
 ```
 
-```{r importing}
+## Exporting Table
+```{r exporting-table}
 writexl::write_xlsx(x = list(db01aSheet = db01a, db01bSheet = db01b, db01cSheet = db01c), path = "OnePiece.xlsx")
 
 write.csv(db01a, file = "csv_db01a.csv")
 ```
 
-```{r plot01a}
-plot01a <- op_powers %>% 
-  left_join(op_ages, by = c("character" = "name")) %>% 
-  relocate(character, age, power) %>% 
-  #group_by(level) %>% 
+## Converting Characters
+```{r mutate-each-upper}
+luffy06 <- luffy04 %>% 
+    mutate_each(method, funs = toupper)
+
+kableExtra::kbl(luffy06) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+```{r mutate-each-lower}
+luffy07 <- luffy06 %>% 
+    mutate_each(method, funs = tolower)
+
+kableExtra::kbl(luffy07) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+```{r mutate-if-upper}
+luffy08 <- luffy07 %>%
+  mutate_if(is.character, str_to_upper)
+
+kableExtra::kbl(luffy08) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+```{r mutate-if-lower}
+luffy09 <- luffy08 %>%
+  mutate_if(is.character, str_to_lower)
+
+kableExtra::kbl(luffy09) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+```{r mutate-all-upper}
+luffy10 <- luffy09 %>% 
+    mutate_all(., .funs = toupper)
+
+kableExtra::kbl(luffy10) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+#drawback: converting numeric to character
+```
+
+```{r mutate-across-upper}
+luffy11 <- luffy09 %>%
+  mutate(across(where(is.character), 
+                  toupper))
+
+kableExtra::kbl(luffy11) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+```{r mutate-across-lower}
+luffy12 <- luffy11 %>% 
+    mutate(across(where(is.character), 
+                  tolower))
+
+kableExtra::kbl(luffy12) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+```{r mutate-across-combine}
+luffy13 <- luffy09 %>% 
+    mutate(across(arc, tolower),
+           across(method, toupper),
+           across(power, round)
+           )
+kableExtra::kbl(luffy13) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+## Substituting
+```{r eliminating-numeric}
+luffy14 <- luffy13 %>% 
+    mutate(
+      power2 = gsub("[0-5]*", "", power), #taking out number 1 to 5
+      arc2 = gsub(".*^", "0", arc), #adding 0 before the first number
+      method2 = gsub("LL", "zz", method) #replacing LL to zz
+      )
+
+kableExtra::kbl(luffy14) %>%
+  kableExtra::kable_styling(bootstrap_options = "striped", 
+                full_width = F, 
+                position = "left")
+```
+
+***
+
+# Data Visualisation
+
+## Datasets
+
+```{r datasets-ratings}
+op_ratings <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_ratings")
+
+glimpse(op_ratings)
+```
+
+```{r filtering-ratings}
+(
+op_ratings02 <- op_ratings %>%
+  select(episode, start, total_votes, average_rating) %>% 
+  pivot_longer(cols = total_votes:average_rating,
+               names_to = "variable",
+               values_to = "value")
+)
+```
+
+```{r shapes, eval=FALSE, include=FALSE}
+#Source: https://github.com/tidyverse/ggplot2/issues/2075
+
+pch_table <- c("0" = "square open",
+               "1" = "circle open",
+               "2" = "triangle open",
+               "3" = "plus",
+               "4" = "cross",
+               "5" = "diamond open",
+               "6" = "triangle down open",
+               "7" = "square cross",
+               "8" = "asterisk",
+               "9" = "diamond plus",
+               "10" = "circle plus",
+               "11" = "star",
+               "12" = "square plus",
+               "13" = "circle cross",
+               "14" = "square triangle",
+               "15" = "square",
+               "16" = "circle small",
+               "17" = "triangle",
+               "18" = "diamond",
+               "19" = "circle",
+               "20" = "bullet",
+               "21" = "circle filled",
+               "22" = "square filled",
+               "23" = "diamond filled",
+               "24" = "triangle filled",
+               "25" = "triangle down filled")
+
+df_shapes <- data.frame(shape = 0:25, shape_name = factor(paste0(0:25, " ('", pch_table, "')")))
+df_shapes <- df_shapes[order(pch_table),]
+
+ggplot(df_shapes, aes(0, 0, shape = shape)) +
+  geom_point(aes(shape = shape), size = 5, fill = 'red', stroke = 2) +
+  scale_shape_identity() +
+  facet_wrap(~reorder(shape_name, shape)) +
+  theme_void()
+
+sort(pch_table)
+```
+
+## Palette: RColorBrewer
+```{r rcolorbrewer}
+pacman::p_load(RColorBrewer)
+
+#RColorBrewer
+display.brewer.all(type = "qual")
+display.brewer.all(type = "seq")
+display.brewer.all(type = "div")
+#display.brewer.pal(n = 12, name = "Set2")
+#brewer.pal(n = 12, name = "Set3")
+#display.brewer.pal(n = 11, name = "RdBu")
+```
+
+## Palette: nord
+```{r nord}
+pacman::p_load(nord)
+
+nord_show_palette("snowstorm")
+nord_show_palette("frost")
+nord_show_palette("aurora")
+nord_show_palette("lumina")
+nord_show_palette("mountain_forms")
+nord_show_palette("silver_mine")
+nord_show_palette("lake_superior")
+nord_show_palette("victory_bonds")
+nord_show_palette("halifax_harbor")
+nord_show_palette("moose_pond")
+nord_show_palette("algoma_forest")
+nord_show_palette("rocky_mountain")
+nord_show_palette("red_mountain")
+nord_show_palette("baie_mouton")
+nord_show_palette("afternoon_prarie")
+#hex-code: https://www.nordtheme.com/docs/colors-and-palettes
+```
+
+## Palette: wesanderson
+```{r wesanderson}
+pacman::p_load(wesanderson)
+
+#names(wes_palettes)
+wes_palette("BottleRocket1")
+wes_palette("BottleRocket2")
+wes_palette("Rushmore1")
+wes_palette("Royal1")
+wes_palette("Royal2")
+wes_palette("Zissou1")
+wes_palette("Darjeeling1")
+wes_palette("Darjeeling2")
+wes_palette("Chevalier1")
+wes_palette("FantasticFox1")
+wes_palette("Moonrise1")
+wes_palette("Moonrise2")
+wes_palette("Moonrise3")
+wes_palette("Cavalcanti1")
+wes_palette("GrandBudapest1")
+wes_palette("GrandBudapest2")
+wes_palette("IsleofDogs1")
+wes_palette("IsleofDogs2")
+
+#hex-code: https://github.com/karthik/wesanderson/blob/master/R/colors.R
+#scales::show_col(wes_palette("IsleofDogs2"))
+```
+
+## Palette: viridis
+```{r viridis}
+pacman::p_load(viridis)
+
+scales::show_col(viridis_pal(option = "viridis")(6))
+scales::show_col(viridis_pal(option = "plasma")(6))
+scales::show_col(viridis_pal(option = "rocket")(6))
+scales::show_col(viridis_pal(option = "magma")(6))
+scales::show_col(viridis_pal(option = "rocket")(6))
+scales::show_col(viridis_pal(option = "mako")(6))
+scales::show_col(viridis_pal(option = "inferno")(6))
+```
+
+## Palette: Sequential
+```{r sequential}
+colorspace::hcl_palettes(type = "sequential", plot = TRUE) 
+```
+
+## Palette: Diverging
+```{r diverging}
+colorspace::hcl_palettes(type = "diverging", plot = TRUE, n = 9)
+#colorspace::divergingx_palettes(plot = TRUE, n = 9)
+```
+
+## Colorblind Friendly
+```{r Okabe-Ito}
+(OkabeIto <- c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
+             "#D55E00", "#CC79A7", "#000000"))
+#https://colorschemedesigner.com/csd-3.5/
+
+pals::pal.bands(OkabeIto)
+
+#Source: https://jfly.uni-koeln.de/color/#pallet
+#Source: https://davidmathlogic.com/colorblind/#%23D81B60-%231E88E5-%23FFC107-%23004D40
+```
+
+## Line chart: Base 
+```{r line-base, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line01 <- op_ratings02 %>% 
+  ggplot(aes(x = episode, y = value)) +
+  geom_line()
+)
+```
+
+## Line chart: Faceting
+```{r line-faceting, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line02 <- op_ratings02 %>% 
+  ggplot(aes(x = episode, y = value)) +
+    geom_line() +
+    facet_wrap(~variable, scales = "free", nrow = 2)
+)
+```
+
+## Line chart: Color and Theme
+```{r color-theme, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line02 <- op_ratings02 %>%
+  #modify the dataset
+  filter(start > 2015 & start < 2021) %>%
+  mutate(variable = recode(variable,
+                           average_rating = "Average Rating",
+                           total_votes = "Total Votes"))  %>%
+  #plot the dataset
+  ggplot(aes(x = episode, y = value)) +
+  facet_wrap(~variable, scales = "free", nrow = 2) +
+  geom_line(color = "#0072B2") + #colorblind-friendly
+  theme_test() #could be explored even further
+)
+```
+
+## Line chart: Coloring Based on Variable
+```{r coloring-by-variable, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line02 <- op_ratings02 %>%
+  #modify the dataset
+  filter(start > 2015 & start < 2021) %>%
+  mutate(variable = recode(variable,
+                           average_rating = "Average Rating",
+                           total_votes = "Total Votes"))  %>%
+  #plot the dataset
+  ggplot(aes(x = episode, y = value)) +
+  facet_wrap(~variable, scales = "free", nrow = 2) +
+  geom_line(aes(color = start)) +
+  theme_test() #could be explored even further
+)
+```
+
+## Line chart: Colorblind Palette
+```{r colorblind-palette, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line02 <- op_ratings02 %>%
+  #modify the dataset
+  filter(start > 2015 & start < 2021) %>%
+  mutate(variable = recode(variable,
+                           average_rating = "Average Rating",
+                           total_votes = "Total Votes"))  %>%
+  #plot the dataset
+  ggplot(aes(x = episode, y = value)) +
+  facet_wrap(~variable, scales = "free", nrow = 2) +
+  geom_line(aes(color = factor(start))) + 
+  ggthemes::scale_color_colorblind() +
+  theme_test() #could be explored even further
+)
+```
+
+## Line Chart: Coloring Manual
+```{r color-manual, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line02 <- op_ratings02 %>%
+  #modify the dataset
+  filter(start > 2015 & start < 2021) %>%
+  mutate(variable = recode(variable,
+                           average_rating = "Average Rating",
+                           total_votes = "Total Votes"))  %>%
+  #plot the dataset
+  ggplot(aes(x = episode, y = value)) +
+  facet_wrap(~variable, scales = "free", nrow = 2) +
+  geom_line(aes(color = factor(variable))) + 
+  scale_color_manual(values = c("blue", "red")) +
+  theme_test() #could be explored even further
+)
+```
+
+## Line chart: Modification
+```{r modification, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  line03 <- op_ratings02 %>%
+    filter(start > 2015 & start < 2021) %>%
+    mutate(
+      variable = recode(variable,
+                        average_rating = "Average Rating",
+                        total_votes = "Total Votes")
+    )  %>%
+    ggplot(aes(x = episode, y = value)) +
+    geom_line(aes(color = factor(start))) +
+    #scale_color_brewer(palette = "Set1") +
+    nord::scale_color_nord("aurora", discrete = TRUE) +
+    facet_wrap(
+      ~ variable,
+      scales = "free",
+      nrow = 2,
+      strip.position = "right"
+    ) +
+    theme_test() +
+    theme(
+      legend.position = "bottom",
+      plot.title = element_text(hjust = 0, size = 16, face = "bold"),
+      plot.subtitle = element_text(hjust = 0, size = 14),
+      plot.caption = element_text(hjust = 0, size = 8),
+      plot.title.position = "plot",
+      plot.caption.position = "plot"
+    ) +
+    labs(
+      title = "One Piece",
+      subtitle = "Ratings and Votes",
+      caption = "\nSource: https://www.kaggle.com/aditya2803",
+      x = "Episode",
+      y = ""
+    ) +
+    guides(
+      color = guide_legend(title = "Year release:")
+    )
+)
+```
+
+## Line chart: Adding points
+```{r adding-points, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+line03 <- op_ratings02 %>% 
+  filter(start > 2015 & start < 2021) %>%
+  mutate(variable = recode(variable, average_rating = "Average Rating",
+                           total_votes = "Total Votes")
+         ) %>% 
+  ggplot(aes(x = episode, y = value)) +
+  facet_wrap(vars(variable), nrow = 2, scales = "free",
+             as.table = TRUE, strip.position = "right") +
+  geom_line(aes(color = factor(start))) +
+  scale_color_brewer(palette = "Set1") +
+  theme_classic() +
+  #ggthemes::theme_economist() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0, size = 16,
+                              face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 13),
+    plot.caption = element_text(hjust = 0, size = 8),
+    plot.title.position = "plot",
+    plot.caption.position =  "plot",) +
+  labs(title = "One Piece",
+       subtitle = "Ratings and Votes",
+       y = "",
+       x = "Episode",
+       caption = "\nSource: https://www.kaggle.com/aditya2803") +
+  geom_point(aes(color = factor(start), fill = factor(start)), 
+             shape = 21, size = 1, alpha = 0.5) +
+  scale_fill_brewer(palette = "Set1") +
+  guides(color = guide_legend(title = "Year release:"),
+         fill = guide_legend(title = "Year release:"))
+)
+```
+
+## Point chart: Dataset
+```{r}
+(
+db02 <- db01c %>% 
+  arrange(desc(power)) %>% 
+  slice_max(power, n = 15, with_ties = TRUE)
+)
+```
+
+## Point chart: Base
+```{r point-base, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  point01 <- ggplot(db02, mapping = aes(x = character, y = age))
+)
+```
+## Point chart: Flipping
+```{r point-flip, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  point01 + coord_flip()
+)
+```
+## Point chart: Assigning the function
+```{r geom-point, out.width = "100%", fig.align = "center", fig.retina = 3}
+point01 + 
+  coord_flip() +
+  geom_point()
+```
+## Point chart: Defining the color
+```{r point-color, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  point01 + 
+  coord_flip() +
+  geom_point(color = "blue",
+             shape = 0,
+             size = 5)
+)
+```
+
+## Point chart: Changing the shape
+```{r point-shape, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  point01 + 
+  coord_flip() +
+  geom_point(color = "blue",
+             shape = 21,
+             size = 3)
+)
+```
+## Point chart: Size
+```{r point-size, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  point02 <- db02 %>% 
+    ggplot(aes(character, age, size = power)) +
+    coord_flip() +
+    geom_point()
+)
+```
+
+## Point chart: Reorder
+```{r plot-reorder, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  point03 <- db02 %>% 
+    ggplot(aes(reorder(character, power), age, size = power)) +
+    coord_flip() +
+    geom_point()
+)
+```
+
+## Static Plot: No Faceting
+```{r point04, out.width = "100%", fig.align = "center", fig.retina = 3}
+(point04 <- op_powers %>%
+  left_join(op_ages, by = c("character" = "name")) %>%
+  relocate(character, age, power) %>%
+  #group_by(level) %>%
   slice_max(power, n = 15, with_ties = FALSE) %>%
-  #ungroup() %>% 
-  ggplot(aes(x = reorder(character, power), 
+  #ungroup() %>%
+  ggplot(aes(x = reorder(character, power),
              y = age)) +
   geom_point(aes(color = factor(affiliations), size = power)) +
+  #coord_cartesian(expand = TRUE, clip = "on") +
   coord_flip() +
   nord::scale_color_nord("aurora") +
   xlab("") +
   ylab("Age") +
   theme_test() +
   theme(
-    axis.text.x = element_text(size = 12),
+    axis.text.x = element_text(size = 8),
     axis.ticks.x = element_blank(),
     axis.line.x = element_blank(),
-    axis.title.x = element_text(size = 11),
+    axis.title.x = element_text(size = 7),
     axis.line.y = element_blank(),
-    axis.title.y = element_text(size = 11),
-    axis.text.y = element_text(size = 12),
+    axis.title.y = element_text(size = 7),
+    axis.text.y = element_text(size = 8),
     plot.title.position = "plot",
     plot.caption.position = "plot",
-    legend.title = element_text(size = 11),
-    legend.text = element_text(size = 11),
+    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 7),
     legend.key.size = unit(0.5, "cm"),
     legend.spacing = unit(1, "cm"),
-    plot.title = element_text(
-      hjust = 0, size = 18, face = "bold"
-    ),
-    plot.subtitle = element_text(hjust = 0, size = 17),
-    plot.caption = element_text(hjust = 0, size = 11),
+    plot.title = element_text(hjust = 0, size = 13, face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, size = 12),
     # legend.title = element_blank(),
     legend.position = "right",
     strip.text.x = element_text(size = 8),
     panel.grid.major.y = element_line(colour = "grey97"),
-    panel.ontop = FALSE
+    panel.ontop = FALSE,
+    panel.spacing = unit(1, "lines")
   ) +
   guides(size = guide_legend("Power"), color = guide_legend("Affiliation")) +
-  labs(
-    title = "The top 15-most powerful characters",
-    subtitle = "",
-    caption = ""
-  ) +
-  scale_size_continuous(range = c(1,5))
-
-plot01a
+  labs(title = "The top 15-most powerful characters",
+       subtitle = "",
+       caption = "") +
+  scale_size_continuous(range = c(1, 5)) +
+  scale_y_continuous(limits = c(10, 90),
+                     breaks = c(20, 50, 80))
+)
 ```
 
-```{r plot01b}
-plot01b <- op_powers %>% 
-  left_join(op_ages, by = c("character" = "name")) %>% 
-  relocate(character, age, power) %>% 
-  #group_by(level) %>% 
+## Static Plot: With Faceting
+```{r point05, out.width = "100%", fig.align = "center", fig.retina = 3}
+(point05 <- op_powers %>%
+  left_join(op_ages, by = c("character" = "name")) %>%
+  relocate(character, age, power) %>%
+  #group_by(level) %>%
   slice_max(power, n = 15, with_ties = FALSE) %>%
-  #ungroup() %>% 
-  ggplot(aes(x = reorder(character, power), 
+  #ungroup() %>%
+  ggplot(aes(x = reorder(character, power),
              y = age)) +
   geom_point(aes(color = factor(affiliations), size = power)) +
+  coord_cartesian(expand = TRUE, clip = "on") +
   coord_flip() +
   nord::scale_color_nord("aurora") +
   xlab("") +
   ylab("Age") +
   theme_test() +
   theme(
-    axis.text.x = element_text(size = 12),
+    axis.text.x = element_text(size = 8),
     axis.ticks.x = element_blank(),
     axis.line.x = element_blank(),
-    axis.title.x = element_text(size = 11),
+    axis.title.x = element_text(size = 7),
     axis.line.y = element_blank(),
-    axis.title.y = element_text(size = 11),
-    axis.text.y = element_text(size = 12),
+    axis.title.y = element_text(size = 7),
+    axis.text.y = element_text(size = 8),
     plot.title.position = "plot",
     plot.caption.position = "plot",
-    legend.title = element_text(size = 11),
-    legend.text = element_text(size = 11),
+    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 7),
     legend.key.size = unit(0.5, "cm"),
     legend.spacing = unit(1, "cm"),
-    plot.title = element_text(
-      hjust = 0, size = 18, face = "bold"
-    ),
-    plot.subtitle = element_text(hjust = 0, size = 17),
-    plot.caption = element_text(hjust = 0, size = 11),
+    plot.title = element_text(hjust = 0, size = 13, face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, size = 12),
     # legend.title = element_blank(),
     legend.position = "right",
     strip.text.x = element_text(size = 8),
     panel.grid.major.y = element_line(colour = "grey97"),
-    panel.ontop = FALSE
+    panel.ontop = FALSE,
+    panel.spacing = unit(1, "lines")
   ) +
   guides(size = guide_legend("Power"), color = guide_legend("Affiliation")) +
-  labs(
-    title = "The top 15-most powerful characters",
-    subtitle = "",
-    caption = ""
-  ) +
-  scale_size_continuous(range = c(1,5)) +
-  facet_grid(.~level)
-
-plot01b
+  labs(title = "The top 15-most powerful characters",
+       subtitle = "",
+       caption = "") +
+  scale_size_continuous(range = c(1, 5)) +
+  scale_y_continuous(limits = c(10, 90),
+                     breaks = c(20, 50, 80)) +
+  facet_grid(. ~ level)
+)
 ```
 
-```{r plot02a}
-plot02a <- op_powers %>% 
-  left_join(op_ages, by = c("character" = "name")) %>% 
-  relocate(character, age, power) %>% 
-  #group_by(level) %>% 
+## Saving Image
+```{r saving-image}
+ggsave(
+  filename = "point05.png",
+  #filename = "point05.pdf",
+  plot = point05,
+  #device = cairo_pdf,
+  width = 297,
+  height = 210,
+  units = "mm"
+)
+```
+
+## Interactive Plot: No Faceting
+```{r point06, out.width = "100%", fig.align = "center", fig.retina = 3, fig.cap = 'Figure 3: The top 15-most powerful characters, without ***facet_grid(. ~ level)***', fig.topcaption = TRUE}
+point06 <- op_powers %>%
+  left_join(op_ages, by = c("character" = "name")) %>%
+  relocate(character, age, power) %>%
+  #group_by(level) %>%
   slice_max(power, n = 15, with_ties = FALSE) %>%
-  #ungroup() %>% 
-  ggplot(aes(x = reorder(character, power), 
-             y = factor(affiliations))) +
+  #ungroup() %>%
+  mutate(text = paste(
+    "Character: ", reorder(character, power), 
+    "\nAffiliation: ", factor(affiliations), 
+    "\nAge: ", age, 
+    "\nPower: ", power, 
+    sep = "")) %>%
+  ggplot(aes(x = reorder(character, power),
+             y = factor(affiliations),
+             text = text)) +
   geom_point(aes(color = age, size = power)) +
+  coord_cartesian(expand = TRUE, clip = "on") +
   coord_flip() +
   #nord::scale_color_nord("victory_bonds", discrete = FALSE) +
   viridis::scale_colour_viridis(option = "viridis", direction = -1) +
@@ -507,51 +1175,61 @@ plot02a <- op_powers %>%
   ylab("") +
   theme_test() +
   theme(
-    axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust=1),
+    axis.text.x = element_text(
+      size = 8,
+      angle = 90,
+      vjust = 0.5,
+      hjust = 1
+    ),
     axis.ticks.x = element_blank(),
     axis.line.x = element_blank(),
-    axis.title.x = element_text(size = 11),
+    axis.title.x = element_text(size = 7),
     axis.line.y = element_blank(),
-    axis.title.y = element_text(size = 11),
-    axis.text.y = element_text(size = 12),
+    axis.title.y = element_text(size = 7),
+    axis.text.y = element_text(size = 8),
     plot.title.position = "plot",
     plot.caption.position = "plot",
-    legend.title = element_text(size = 11),
-    legend.text = element_text(size = 11),
+    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 7),
     legend.key.size = unit(0.5, "cm"),
     legend.spacing = unit(1, "cm"),
-    plot.title = element_text(
-      hjust = 0, size = 18, face = "bold"
-    ),
-    plot.subtitle = element_text(hjust = 0, size = 17),
-    plot.caption = element_text(hjust = 0, size = 11),
+    plot.title = element_text(hjust = 0, size = 13, face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, size = 12),
     # legend.title = element_blank(),
-    legend.position = "right",
+    legend.position = "none",
     strip.text.x = element_text(size = 8),
     panel.grid.major.y = element_line(colour = "grey97"),
     panel.ontop = FALSE
   ) +
   guides(size = guide_legend("Power"), color = guide_colorbar("Age")) +
-  labs(
-    title = "The top 15-most powerful characters",
-    subtitle = "",
-    caption = ""
-  ) +
-  scale_size_continuous(range = c(1,5))
-
-plot02a
+  labs(title = "",
+       subtitle = "",
+       caption = "") +
+  scale_size_continuous(range = c(1, 5))
+  
+ggplotly(point06, tooltip = "text")
 ```
 
-```{r plot02b}
-plot02b <- op_powers %>% 
+## Interactive Plot: With Faceting
+```{r point07, out.width = "100%", fig.align = "center", fig.retina = 3, fig.cap = "Figure 4: The top 15-most powerful characters, with ***facet_grid(. ~ level)***", fig.topcaption = TRUE}
+point07 <- op_powers %>% 
   left_join(op_ages, by = c("character" = "name")) %>% 
   relocate(character, age, power) %>% 
   #group_by(level) %>% 
   slice_max(power, n = 15, with_ties = FALSE) %>%
   #ungroup() %>% 
+  mutate(text = paste(
+    "Character: ", reorder(character, power), 
+    "\nAffiliation: ", factor(affiliations), 
+    "\nAge: ", age, 
+    "\nPower: ", power, 
+    sep = "")) %>%
   ggplot(aes(x = reorder(character, power), 
-             y = factor(affiliations))) +
+             y = factor(affiliations),
+             text = text)) +
   geom_point(aes(color = age, size = power)) +
+  coord_cartesian(expand = TRUE, clip = "on") +
   coord_flip() +
   #nord::scale_color_nord("victory_bonds", discrete = FALSE) +
   viridis::scale_colour_viridis(option = "viridis", direction = -1) +
@@ -559,44 +1237,69 @@ plot02b <- op_powers %>%
   ylab("") +
   theme_test() +
   theme(
-    axis.text.x = element_text(size = 12, angle = 90, vjust = 0.5, hjust=1),
+    axis.text.x = element_text(size = 8, angle = 90, vjust = 0.5, hjust=1),
     axis.ticks.x = element_blank(),
     axis.line.x = element_blank(),
-    axis.title.x = element_text(size = 11),
+    axis.title.x = element_text(size = 7),
     axis.line.y = element_blank(),
-    axis.title.y = element_text(size = 11),
-    axis.text.y = element_text(size = 12),
+    axis.title.y = element_text(size = 7),
+    axis.text.y = element_text(size = 8),
     plot.title.position = "plot",
     plot.caption.position = "plot",
-    legend.title = element_text(size = 11),
-    legend.text = element_text(size = 11),
+    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 7),
     legend.key.size = unit(0.5, "cm"),
     legend.spacing = unit(1, "cm"),
     plot.title = element_text(
-      hjust = 0, size = 18, face = "bold"
+      hjust = 0, size = 13, face = "bold"
     ),
-    plot.subtitle = element_text(hjust = 0, size = 17),
-    plot.caption = element_text(hjust = 0, size = 11),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, size = 12),
     # legend.title = element_blank(),
-    legend.position = "right",
+    legend.position = "none",
     strip.text.x = element_text(size = 8),
     panel.grid.major.y = element_line(colour = "grey97"),
-    panel.ontop = FALSE
+    panel.ontop = FALSE,
+    panel.spacing = unit(1, "lines")
   ) +
   guides(size = guide_legend("Power"), color = guide_colorbar("Age")) +
   labs(
-    title = "The top 15-most powerful characters",
+    title = "",
     subtitle = "",
     caption = ""
   ) +
   scale_size_continuous(range = c(1,5)) +
   facet_grid(.~level)
 
-plot02b
+ggplotly(point07, tooltip = "text")
 ```
 
-```{r clearing-end, include = FALSE}
+***
+
+# Clearing
+
+```{r clearing-last, echo=TRUE}
 #clearing the environment
 ls()
 rm(list=ls())
 ```
+
+***
+
+# Acknowledgements
+
+## References
+
+*   Grolemund, G., & Wickham, H. (2017). R for Data Science. O’Reilly Media.
+*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686.
+*   Claus O. Wilke: Data Visualization in R, https://wilkelab.org/SDS375/
+*   Cedric Scherer's personal blog: https://www.cedricscherer.com/
+*   The R Graph Gallery: https://www.r-graph-gallery.com/index.html
+*   ...and other sources i.e. stackoverflow.com, github.com
+
+## Datasets
+*   One Piece chapter and character: https://www.kaggle.com/michau96
+*   One Piece anime rating: https://www.kaggle.com/aditya2803
+*   One Piece power ranking: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+*   One Piece characters' age: https://listfist.com/list-of-one-piece-characters-by-age
