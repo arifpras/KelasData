@@ -34,9 +34,9 @@
 class: center, middle, inverse, title-slide
 
 # Statistics with R:
-## Data Wrangling
+## Data Wrangling | Data Visualisation
 ### Arif P. Sulistiono
-### <br>Kelas Data on 2021-10-28<br><a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>
+### <br>Kelas Data on 28 October 2021 and 4 November 2021<br><a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>
 
 ---
 
@@ -121,7 +121,7 @@ An employee of the Republic of Indonesia’s Ministry of Finance. Funded by the 
 .panel[.panel-name[3: Basic Modelling]
 .pull-left[
 ## .center[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M48 352c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm416 0c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48zm-119 11.1c4.6-14.5 1.6-30.8-9.8-42.3-11.5-11.5-27.8-14.4-42.3-9.9-7-13.5-20.7-23-36.9-23s-29.9 9.5-36.9 23c-14.5-4.6-30.8-1.6-42.3 9.9-11.5 11.5-14.4 27.8-9.9 42.3-13.5 7-23 20.7-23 36.9s9.5 29.9 23 36.9c-4.6 14.5-1.6 30.8 9.9 42.3 8.2 8.2 18.9 12.3 29.7 12.3 4.3 0 8.5-1.1 12.6-2.5 7 13.5 20.7 23 36.9 23s29.9-9.5 36.9-23c4.1 1.3 8.3 2.5 12.6 2.5 10.8 0 21.5-4.1 29.7-12.3 11.5-11.5 14.4-27.8 9.8-42.3 13.5-7 23-20.7 23-36.9s-9.5-29.9-23-36.9zM512 224c0-53-43-96-96-96-.6 0-1.1.2-1.6.2 1.1-5.2 1.6-10.6 1.6-16.2 0-44.2-35.8-80-80-80-24.6 0-46.3 11.3-61 28.8C256.4 24.8 219.3 0 176 0 114.1 0 64 50.1 64 112c0 7.3.8 14.3 2.1 21.2C27.8 145.8 0 181.5 0 224c0 53 43 96 96 96h43.4c3.6-8 8.4-15.4 14.8-21.8 13.5-13.5 31.5-21.1 50.8-21.3 13.5-13.2 31.7-20.9 51-20.9s37.5 7.7 51 20.9c19.3.2 37.3 7.8 50.8 21.3 6.4 6.4 11.3 13.8 14.8 21.8H416c53 0 96-43 96-96z"&gt;&lt;/path&gt;&lt;/svg&gt;]
-* Loading the dataset: `read_csv()` or `read_excel()`, 
+* Loading the dataset: `read_csv()` or `read_excel()`,
 * Correlation: `Hmisc::rcorr(as.matrix())`
 * Summary: `stargazer()`
 * Linear regression: `lm()`, `lm_robust()`, `dynlm()`
@@ -138,7 +138,7 @@ class: inverse, center, middle
 .large[Pipe operator: ...then]
 
 ---
-# Prequisites
+# Prerequisites
 
 ### Clean the environment
 
@@ -177,8 +177,8 @@ op_ages &lt;- read_excel(path = "/Users/arifpras/OneDrive - The University of No
 DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
-<div id="htmlwidget-dfd547c07b9ec86e890e" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-dfd547c07b9ec86e890e">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282","283","284","285","286","287","288","289","290","291","292","293","294","295","296","297","298","299","300","301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318","319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334","335","336","337","338","339","340","341","342","343","344","345","346","347","348","349","350","351","352","353","354","355","356","357","358","359","360","361","362","363","364","365","366","367","368","369","370","371","372","373","374","375","376","377","378","379","380","381","382","383","384","385","386","387","388","389","390","391","392","393","394","395","396","397","398","399","400","401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422","423","424","425","426","427","428","429","430","431","432","433","434","435","436","437","438","439","440","441","442","443","444","445","446","447","448","449","450","451","452","453","454","455","456","457","458","459","460","461","462","463","464","465","466","467","468","469","470","471","472","473","474","475","476","477","478","479","480","481","482"],["Zunesha","Jarul","Jorul","Hatcha","Brogy","Dorry","Morley","Oars","Kashii","Oimo","Kureha","Surume","Jaguar D. Saul","Sanjuan Wolf","Haredas","Streusen","Brook","Clover","Hajrudin","Tenguyama Hitetsu","Carmel","Amazon","Sengoku","Chinjao","Monkey D. Garp","Silvers Rayleigh","Bakkin","Tsuru (Marine)","Boodle","Gerd","Crocus","Edward Newgate","Kokoro","Little Oars Jr.","Shimotsuki Yasuie","Hyogoro","Lao G","Neptune","Onimaru","Charlotte Linlin","Gan Fall","Hiluluk","Tom","Zeff","Spandine","Chief","Shakuyaku","Goldberg","Loki","Road","Tonjit","Den","Minister of the Left","Fukurokuju","Giolla","Riku Doldo III","Jigoro","Kaido","Borsalino Kizaru","Elizabello II","Ashura Doji","Brannew","Mukkashimi Tower","Queen","Vinsmoke Judge","Curly Dadan","Minister of the Right","Monkey D. Dragon","Rosward","Sakazuki Akainu","Tsuru (Wano)","Issho Fujitora","Kurozumi Orochi","Pagaya","And","Emporio Ivankov","Gol D. Roger","Laboon","Morgans","T Bone","Machvise","Squard","Drophy","Heracles","Koushirou","Benn Beckman","Charlotte Perospero","Gecko Moria","Igaram","Nefertari Cobra","Charlotte Compote","Kuzan Aokiji","Shinobu","Trebol","Bas","Charlotte Daifuku","Charlotte Katakuri","Charlotte Oven","Fisher Tiger","Genzo","Momonga","Pound","Bartholomew Kuma","Charlotte Amande","Charlotte Effilée","Charlotte Hachée","Charlotte Mondée","Denjiro","Hogback","Karasu","King","Magellan","Shimotsuki Ryuma","Urouge","Vista","Yasopp","Aladdin","Charlotte Cabaletta","Charlotte Cadenza","Charlotte Counter","Charlotte Gala","Charlotte Opera","Crocodile","Higuma","Jerry","Jinbe","Senor Pink","Tamago","Chadros Higelyges","Charlotte Angel","Charlotte Cracker","Charlotte Custard","Diamante","Fujin","Gaimon","Izou","Marco","Raijin","Sarutobi","Turco","Yama","Charlotte Zuccotto","Krieg","Kyros","Morgan","Shiryu of the Rain","Charlotte Broyé","Charlotte Brûlée","Dracule Mihawk","Kazekage","Mont Blanc Cricket","Avalo Pizarro","Bluejam","Capone Bege","Charlotte Basskarte","Charlotte Dosmarche","Charlotte Nusstorte","Daikoku","Hanzo","Diamond Jozu","Kerville","Orlumbus","Arlong","Chaka","Charlotte Noisette","Donquixote Doflamingo","Kawamatsu","Laffitte","Spandam","Vergo","Caesar Clown","Charlotte Cornstarch","Charlotte Mash","Charlotte Moscato","Iceburg","Inuarashi","Ipponmatsu","Marshall D. Teach","Nekomamushi","Pica","Suleiman","Tomato Gang","Buggy","Charlotte Compo","Charlotte Laurin","Enel","Hyouzou","Kalgara","Kozuki Oden","Kurozumi Kanjuro","Mont Blanc Noland","Red Haired Shanks","Bastille","Charlotte Mont-d'Or","Foxy","Hack (Fishmen)","Hatchan","Kuroobi","Vasco Shot","Who's-Who","Charlotte Marnier","Charlotte Mozart","Galdino","Jabra","Lindbergh","Absalom","Catarina Devon","Charlotte High-Fat","Charlotte Tablet","Demaro Black","Franky","Kelly Funk","Kin'emon","Kozuki Toki","Kumadori","Nezumi","Otohime","Smoker","Vito","Charlotte Cinnamon","Charlotte Citron","Charlotte Smoothie","Chew","Dalton","Edward Weevil","Hannyabal","Kuro","Lucky Roux","Pell","Raizo","Tilestone","Vander Decken IX","Zambai","Belo Betty","Cabaji","Carne","Charlotte Basans","Charlotte Saint-Marc","Hina","Sasaki","Sentomaru","Shishilian","Bobby Funk","Charlotte Melise","Gladius","Gotti","Nico Olvia","Pappag","Peepley Lulu","Shura","X Drake","Bentham","Blueno","Caribou","Charlotte Dacquoise","Chess","Pedro","Basil Hawkins","Boa Hancock","Charlotte Galette","Charlotte Poire","Daz Bones","Fukurou","Gedatsu","Makino","Scratchmen Apoo","Babe","Bell-mère","Boa Sandersonia","Buffalo","Charlotte Bavarois","Charlotte Snack","Daruma","Dosun","Giovanni","Hody Jones","Hold'em","Ikaros Much","Kuromarimo","Monet","Mounblutain","Nico Robin","Rob Lucci","Zeo","Black Maria","Charlotte Praline","Charlotte Prim","Concelot","Coribou","Inazuma","Jango","Jesus Burgess","Mohji","Ohm","Patty","Shirley","Viola","Wapol","Bishamon","Boa Marigold","Charlotte Kanten","Charlotte Katou","Charlotte Montb","Doc Q","Fullbody","Jack","Penguin","Sai","Wanda","Wanze","Yamato","Zala","Alvida","Bellamy","Byron","Charlotte Chiboust","Cocoa","Gin","Hotori","Kalifa","Killer","Kotori","Pekoms","Sarquiss","Satori","Shachi","Shoujou","Van Augur","Wicca","Cavendish","Charlotte Chiffon","Charlotte Lola","Chocolat","Donquixote Rosinante","Gem","Kozuki Hiyori","Paulie","Trafalgar D. Water Law","Yosaku","Charlotte Maple","Charlotte Marble","Charlotte Mobile","Charlotte Myukuru","Duval","Genbo","Johnny","Kaku","Leo","Manjaro","Mansherry","Masira","Pearl","Perona","Porchemy","Rock (Yeti)","Scarlett","Scotch (Yeti)","Wadatsumi","Baby 5","Bartolomeo","Bluegilly","Braham","Charlos","Charlotte Brownie","Drip","Fukaboshi","Jewelry Bonney","Kamakiri","Mikita","Sheepshead","Speed","Victoria Cindry","Vinsmoke Reiju","Wyper","Yazaemon","Buchi","Charlotte Joconde","Eustass Kid","Koala","Ryuboshi","Sadi","Sham","Tashigi","Bepo","Charlotte Raisin","Helmeppo","Ideo","Kikunojo","Kiwi","Koza","Nero","Nojiko","Pascia","Raki","Sabo","Sugar","Ulti","Charlotte Panna","Conis","Jigoku Benten","Mozu","Roronoa Zoro","Vinsmoke Ichiji","Vinsmoke Niji","Vinsmoke Sanji","Vinsmoke Yonji","Charlotte Joscarpone","Charlotte Mascarpone","Kyuin","Mamboshi","Nami","Page One","Portgas D. Ace","Sterry","Charlotte Yuen","Kaya","Monkey D. Luffy","Usopp","Camie","Charlotte Akimeg","Charlotte Allmeg","Charlotte Fuyumeg","Charlotte Harumeg","Charlotte Newgo","Charlotte Newichi","Charlotte Newji","Charlotte Newsan","Charlotte Newshi","Charlotte Nutmeg","Koby","Marguerite","Marianne","Nefertari Vivi","Saldeath","Charlotte Nougat","Matsuge","Shalria","Tony Tony Chopper","Charlotte Pudding","Cowboy","Dellinger","Ivan X","Karoo","Momoo","Rebecca","Shirahoshi","Carrot","Charlotte Flampe","Kentauros","Stomp","Bourbon Jr.","Charlotte Anglais","Chome","Chouchou","Hikoichi","Hoichael","Michael","Charlotte Wafers","Nora Gitsune","Charlotte Willow","Aisa","Charlotte De-Chat","Kuina","Ninjin","Piiman","Tamanegi","Charlotte Normande","Chimney","Charlotte Dolce","Charlotte Dragée","Mocha","Charlotte Anana","Kozuki Momonosuke","Tama (Human)","Toko","Smiley","Capone Pez","Nekozaemon","Nuke Suzume","Oars (Zombie)","Ryunosuke","Torasaburo"],[1000,408,344,188,160,160,160,159,156,153,141,120,105,99,97,92,90,85,81,81,80,79,79,78,78,78,76,76,75,75,73,72,72,72,71,70,70,70,69,68,68,68,67,67,66,65,64,63,63,63,63,62,62,61,61,60,59,59,58,57,56,56,56,56,56,55,55,55,55,55,55,54,54,54,53,53,53,53,53,53,52,52,51,51,51,50,50,50,50,50,49,49,49,49,48,48,48,48,48,48,48,48,47,47,47,47,47,47,47,47,47,47,47,47,47,47,46,46,46,46,46,46,46,46,46,46,46,46,45,45,45,45,45,45,45,45,45,45,45,45,45,44,44,44,44,44,43,43,43,43,43,42,42,42,42,42,42,42,42,42,42,42,41,41,41,41,41,41,41,41,40,40,40,40,40,40,40,40,40,40,40,40,39,39,39,39,39,39,39,39,39,39,38,38,38,38,38,38,38,38,37,37,37,37,37,36,36,36,36,36,36,36,36,36,36,36,36,36,36,35,35,35,35,35,35,35,35,35,35,35,35,35,35,34,34,34,34,34,34,34,34,34,33,33,33,33,33,33,33,33,33,32,32,32,32,32,32,31,31,31,31,31,31,31,31,31,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,29,29,29,29,29,29,29,29,29,29,29,29,29,29,28,28,28,28,28,28,28,28,28,28,28,28,28,28,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,26,26,26,26,26,26,26,26,26,26,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,23,23,23,23,23,23,23,23,22,22,22,22,22,22,22,22,22,22,22,22,22,22,21,21,21,21,21,21,21,21,21,20,20,20,20,20,20,20,20,19,19,19,19,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,17,17,17,17,16,16,16,16,16,16,16,16,15,15,15,15,14,14,14,14,14,14,14,13,13,12,11,11,11,11,11,11,10,10,9,9,9,8,8,8,6,4,1,0,0,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4d4c74859e4946b2f44a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4d4c74859e4946b2f44a">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282","283","284","285","286","287","288","289","290","291","292","293","294","295","296","297","298","299","300","301","302","303","304","305","306","307","308","309","310","311","312","313","314","315","316","317","318","319","320","321","322","323","324","325","326","327","328","329","330","331","332","333","334","335","336","337","338","339","340","341","342","343","344","345","346","347","348","349","350","351","352","353","354","355","356","357","358","359","360","361","362","363","364","365","366","367","368","369","370","371","372","373","374","375","376","377","378","379","380","381","382","383","384","385","386","387","388","389","390","391","392","393","394","395","396","397","398","399","400","401","402","403","404","405","406","407","408","409","410","411","412","413","414","415","416","417","418","419","420","421","422","423","424","425","426","427","428","429","430","431","432","433","434","435","436","437","438","439","440","441","442","443","444","445","446","447","448","449","450","451","452","453","454","455","456","457","458","459","460","461","462","463","464","465","466","467","468","469","470","471","472","473","474","475","476","477","478","479","480","481","482"],["Zunesha","Jarul","Jorul","Hatcha","Brogy","Dorry","Morley","Oars","Kashii","Oimo","Kureha","Surume","Jaguar D. Saul","Sanjuan Wolf","Haredas","Streusen","Brook","Clover","Hajrudin","Tenguyama Hitetsu","Carmel","Amazon","Sengoku","Chinjao","Monkey D. Garp","Silvers Rayleigh","Bakkin","Tsuru (Marine)","Boodle","Gerd","Crocus","Edward Newgate","Kokoro","Little Oars Jr.","Shimotsuki Yasuie","Hyogoro","Lao G","Neptune","Onimaru","Charlotte Linlin","Gan Fall","Hiluluk","Tom","Zeff","Spandine","Chief","Shakuyaku","Goldberg","Loki","Road","Tonjit","Den","Minister of the Left","Fukurokuju","Giolla","Riku Doldo III","Jigoro","Kaido","Borsalino Kizaru","Elizabello II","Ashura Doji","Brannew","Mukkashimi Tower","Queen","Vinsmoke Judge","Curly Dadan","Minister of the Right","Monkey D. Dragon","Rosward","Sakazuki Akainu","Tsuru (Wano)","Issho Fujitora","Kurozumi Orochi","Pagaya","And","Emporio Ivankov","Gol D. Roger","Laboon","Morgans","T Bone","Machvise","Squard","Drophy","Heracles","Koushirou","Benn Beckman","Charlotte Perospero","Gecko Moria","Igaram","Nefertari Cobra","Charlotte Compote","Kuzan Aokiji","Shinobu","Trebol","Bas","Charlotte Daifuku","Charlotte Katakuri","Charlotte Oven","Fisher Tiger","Genzo","Momonga","Pound","Bartholomew Kuma","Charlotte Amande","Charlotte Effilée","Charlotte Hachée","Charlotte Mondée","Denjiro","Hogback","Karasu","King","Magellan","Shimotsuki Ryuma","Urouge","Vista","Yasopp","Aladdin","Charlotte Cabaletta","Charlotte Cadenza","Charlotte Counter","Charlotte Gala","Charlotte Opera","Crocodile","Higuma","Jerry","Jinbe","Senor Pink","Tamago","Chadros Higelyges","Charlotte Angel","Charlotte Cracker","Charlotte Custard","Diamante","Fujin","Gaimon","Izou","Marco","Raijin","Sarutobi","Turco","Yama","Charlotte Zuccotto","Krieg","Kyros","Morgan","Shiryu of the Rain","Charlotte Broyé","Charlotte Brûlée","Dracule Mihawk","Kazekage","Mont Blanc Cricket","Avalo Pizarro","Bluejam","Capone Bege","Charlotte Basskarte","Charlotte Dosmarche","Charlotte Nusstorte","Daikoku","Hanzo","Diamond Jozu","Kerville","Orlumbus","Arlong","Chaka","Charlotte Noisette","Donquixote Doflamingo","Kawamatsu","Laffitte","Spandam","Vergo","Caesar Clown","Charlotte Cornstarch","Charlotte Mash","Charlotte Moscato","Iceburg","Inuarashi","Ipponmatsu","Marshall D. Teach","Nekomamushi","Pica","Suleiman","Tomato Gang","Buggy","Charlotte Compo","Charlotte Laurin","Enel","Hyouzou","Kalgara","Kozuki Oden","Kurozumi Kanjuro","Mont Blanc Noland","Red Haired Shanks","Bastille","Charlotte Mont-d'Or","Foxy","Hack (Fishmen)","Hatchan","Kuroobi","Vasco Shot","Who's-Who","Charlotte Marnier","Charlotte Mozart","Galdino","Jabra","Lindbergh","Absalom","Catarina Devon","Charlotte High-Fat","Charlotte Tablet","Demaro Black","Franky","Kelly Funk","Kin'emon","Kozuki Toki","Kumadori","Nezumi","Otohime","Smoker","Vito","Charlotte Cinnamon","Charlotte Citron","Charlotte Smoothie","Chew","Dalton","Edward Weevil","Hannyabal","Kuro","Lucky Roux","Pell","Raizo","Tilestone","Vander Decken IX","Zambai","Belo Betty","Cabaji","Carne","Charlotte Basans","Charlotte Saint-Marc","Hina","Sasaki","Sentomaru","Shishilian","Bobby Funk","Charlotte Melise","Gladius","Gotti","Nico Olvia","Pappag","Peepley Lulu","Shura","X Drake","Bentham","Blueno","Caribou","Charlotte Dacquoise","Chess","Pedro","Basil Hawkins","Boa Hancock","Charlotte Galette","Charlotte Poire","Daz Bones","Fukurou","Gedatsu","Makino","Scratchmen Apoo","Babe","Bell-mère","Boa Sandersonia","Buffalo","Charlotte Bavarois","Charlotte Snack","Daruma","Dosun","Giovanni","Hody Jones","Hold'em","Ikaros Much","Kuromarimo","Monet","Mounblutain","Nico Robin","Rob Lucci","Zeo","Black Maria","Charlotte Praline","Charlotte Prim","Concelot","Coribou","Inazuma","Jango","Jesus Burgess","Mohji","Ohm","Patty","Shirley","Viola","Wapol","Bishamon","Boa Marigold","Charlotte Kanten","Charlotte Katou","Charlotte Montb","Doc Q","Fullbody","Jack","Penguin","Sai","Wanda","Wanze","Yamato","Zala","Alvida","Bellamy","Byron","Charlotte Chiboust","Cocoa","Gin","Hotori","Kalifa","Killer","Kotori","Pekoms","Sarquiss","Satori","Shachi","Shoujou","Van Augur","Wicca","Cavendish","Charlotte Chiffon","Charlotte Lola","Chocolat","Donquixote Rosinante","Gem","Kozuki Hiyori","Paulie","Trafalgar D. Water Law","Yosaku","Charlotte Maple","Charlotte Marble","Charlotte Mobile","Charlotte Myukuru","Duval","Genbo","Johnny","Kaku","Leo","Manjaro","Mansherry","Masira","Pearl","Perona","Porchemy","Rock (Yeti)","Scarlett","Scotch (Yeti)","Wadatsumi","Baby 5","Bartolomeo","Bluegilly","Braham","Charlos","Charlotte Brownie","Drip","Fukaboshi","Jewelry Bonney","Kamakiri","Mikita","Sheepshead","Speed","Victoria Cindry","Vinsmoke Reiju","Wyper","Yazaemon","Buchi","Charlotte Joconde","Eustass Kid","Koala","Ryuboshi","Sadi","Sham","Tashigi","Bepo","Charlotte Raisin","Helmeppo","Ideo","Kikunojo","Kiwi","Koza","Nero","Nojiko","Pascia","Raki","Sabo","Sugar","Ulti","Charlotte Panna","Conis","Jigoku Benten","Mozu","Roronoa Zoro","Vinsmoke Ichiji","Vinsmoke Niji","Vinsmoke Sanji","Vinsmoke Yonji","Charlotte Joscarpone","Charlotte Mascarpone","Kyuin","Mamboshi","Nami","Page One","Portgas D. Ace","Sterry","Charlotte Yuen","Kaya","Monkey D. Luffy","Usopp","Camie","Charlotte Akimeg","Charlotte Allmeg","Charlotte Fuyumeg","Charlotte Harumeg","Charlotte Newgo","Charlotte Newichi","Charlotte Newji","Charlotte Newsan","Charlotte Newshi","Charlotte Nutmeg","Koby","Marguerite","Marianne","Nefertari Vivi","Saldeath","Charlotte Nougat","Matsuge","Shalria","Tony Tony Chopper","Charlotte Pudding","Cowboy","Dellinger","Ivan X","Karoo","Momoo","Rebecca","Shirahoshi","Carrot","Charlotte Flampe","Kentauros","Stomp","Bourbon Jr.","Charlotte Anglais","Chome","Chouchou","Hikoichi","Hoichael","Michael","Charlotte Wafers","Nora Gitsune","Charlotte Willow","Aisa","Charlotte De-Chat","Kuina","Ninjin","Piiman","Tamanegi","Charlotte Normande","Chimney","Charlotte Dolce","Charlotte Dragée","Mocha","Charlotte Anana","Kozuki Momonosuke","Tama (Human)","Toko","Smiley","Capone Pez","Nekozaemon","Nuke Suzume","Oars (Zombie)","Ryunosuke","Torasaburo"],[1000,408,344,188,160,160,160,159,156,153,141,120,105,99,97,92,90,85,81,81,80,79,79,78,78,78,76,76,75,75,73,72,72,72,71,70,70,70,69,68,68,68,67,67,66,65,64,63,63,63,63,62,62,61,61,60,59,59,58,57,56,56,56,56,56,55,55,55,55,55,55,54,54,54,53,53,53,53,53,53,52,52,51,51,51,50,50,50,50,50,49,49,49,49,48,48,48,48,48,48,48,48,47,47,47,47,47,47,47,47,47,47,47,47,47,47,46,46,46,46,46,46,46,46,46,46,46,46,45,45,45,45,45,45,45,45,45,45,45,45,45,44,44,44,44,44,43,43,43,43,43,42,42,42,42,42,42,42,42,42,42,42,41,41,41,41,41,41,41,41,40,40,40,40,40,40,40,40,40,40,40,40,39,39,39,39,39,39,39,39,39,39,38,38,38,38,38,38,38,38,37,37,37,37,37,36,36,36,36,36,36,36,36,36,36,36,36,36,36,35,35,35,35,35,35,35,35,35,35,35,35,35,35,34,34,34,34,34,34,34,34,34,33,33,33,33,33,33,33,33,33,32,32,32,32,32,32,31,31,31,31,31,31,31,31,31,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,29,29,29,29,29,29,29,29,29,29,29,29,29,29,28,28,28,28,28,28,28,28,28,28,28,28,28,28,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,26,26,26,26,26,26,26,26,26,26,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,23,23,23,23,23,23,23,23,22,22,22,22,22,22,22,22,22,22,22,22,22,22,21,21,21,21,21,21,21,21,21,20,20,20,20,20,20,20,20,19,19,19,19,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,17,17,17,17,16,16,16,16,16,16,16,16,15,15,15,15,14,14,14,14,14,14,14,13,13,12,11,11,11,11,11,11,10,10,9,9,9,8,8,8,6,4,1,0,0,0,0,0]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 exclude: false
@@ -191,20 +191,103 @@ op_powers &lt;- read_excel(path = "/Users/arifpras/OneDrive - The University of 
 DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
-<div id="htmlwidget-1e61ecf1255ba2c79ea0" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1e61ecf1255ba2c79ea0">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56"],[100,100,100,100,99,95,95,94.5,94,93,93,92,92,89.5,88,85,85,85,84.5,84,82,81,80.5,80,79.5,79,79,79,77,77,77,76.5,76,76,75.5,75,74,74,74,73,72.5,72.5,72,72,71,70,70,69,68,66,65,65,65,65,64,60],["Red Haired Shanks","Marshall D. Teach","Charlotte Linlin","Kaido","Monkey D. Dragon","Sakazuki Akainu","Monkey D. Garp","Sengoku","Kuzan Aokiji","Borsalino Kizaru","Silvers Rayleigh","Issho Fujitora","Dracule Mihawk","Marco","Sabo","Shiryu of the Rain","Magellan","Monkey D. Luffy","Charlotte Katakuri","Diamond Jozu","Charlotte Smoothie","Donquixote Doflamingo","Bartholomew Kuma","Enel","Trafalgar D. Water Law","Charlotte Cracker","Jinbe","Roronoa Zoro","Jesus Burgess","Urouge","Eustass Kid","Crocodile","Emporio Ivankov","Boa Hancock","Vinsmoke Sanji","Gecko Moria","Rob Lucci","Capone Bege","X Drake","Scratchmen Apoo","Cavendish","Smoker","Basil Hawkins","Bartolomeo","Caesar Clown","Hody Jones","Franky","Sai","Leo","Brook","Hajrudin","Ideo","Nico Robin","Buggy","Usopp","Orlumbus"],["Yonko","Yonko","Yonko","Yonko","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General"],["Red Haired Pirates","Blackbeard Pirates","Big Mom Pirates","Beasts Pirates","Revolutionary Army","Marine","Marine","Marine","Marine","Marine","Roger Pirates","Marine","Sichibukai","Whitebeard Pirates","Revolutionary Army","Blackbeard Pirates","Marine","Straw Hat Pirates","Big Mom Pirates","Whitebeard Pirates","Big Mom Pirates","Donquixote Pirates","Marine","God's Army","Heart Pirates","Big Mom Pirates","Straw Hat Pirates","Straw Hat Pirates","Blackbeard Pirates","Fallen Monk Pirates","Kid Pirates","Sichibukai","Revolutionary Army","Kuja Pirates","Straw Hat Pirates","Thriller Bark Pirates","Marine","Fire Tank Pirates","Drake Pirates","On Air Pirates","Beautiful Pirates","Marine","Hawkins Pirates","Barto Club","Fire Tank Pirates","New Fish-Man Pirates","Straw Hat Pirates","Chinjao Family","Tontatta Pirates","Straw Hat Pirates","New Giant Warrior Pirates","Ideo Pirates","Straw Hat Pirates","Buggy Pirates","Straw Hat Pirates","Yonta Maria Grand Fleet"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>power<\/th>\n      <th>character<\/th>\n      <th>level<\/th>\n      <th>affiliations<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-63756b3554ec71e08c60" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-63756b3554ec71e08c60">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56"],[100,100,100,100,99,95,95,94.5,94,93,93,92,92,89.5,88,85,85,85,84.5,84,82,81,80.5,80,79.5,79,79,79,77,77,77,76.5,76,76,75.5,75,74,74,74,73,72.5,72.5,72,72,71,70,70,69,68,66,65,65,65,65,64,60],["Red Haired Shanks","Marshall D. Teach","Charlotte Linlin","Kaido","Monkey D. Dragon","Sakazuki Akainu","Monkey D. Garp","Sengoku","Kuzan Aokiji","Borsalino Kizaru","Silvers Rayleigh","Issho Fujitora","Dracule Mihawk","Marco","Sabo","Shiryu of the Rain","Magellan","Monkey D. Luffy","Charlotte Katakuri","Diamond Jozu","Charlotte Smoothie","Donquixote Doflamingo","Bartholomew Kuma","Enel","Trafalgar D. Water Law","Charlotte Cracker","Jinbe","Roronoa Zoro","Jesus Burgess","Urouge","Eustass Kid","Crocodile","Emporio Ivankov","Boa Hancock","Vinsmoke Sanji","Gecko Moria","Rob Lucci","Capone Bege","X Drake","Scratchmen Apoo","Cavendish","Smoker","Basil Hawkins","Bartolomeo","Caesar Clown","Hody Jones","Franky","Sai","Leo","Brook","Hajrudin","Ideo","Nico Robin","Buggy","Usopp","Orlumbus"],["Yonko","Yonko","Yonko","Yonko","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Admiral","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","Shichibukai","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General","General"],["Red Haired Pirates","Blackbeard Pirates","Big Mom Pirates","Beasts Pirates","Revolutionary Army","Marine","Marine","Marine","Marine","Marine","Roger Pirates","Marine","Sichibukai","Whitebeard Pirates","Revolutionary Army","Blackbeard Pirates","Marine","Straw Hat Pirates","Big Mom Pirates","Whitebeard Pirates","Big Mom Pirates","Donquixote Pirates","Marine","God's Army","Heart Pirates","Big Mom Pirates","Straw Hat Pirates","Straw Hat Pirates","Blackbeard Pirates","Fallen Monk Pirates","Kid Pirates","Sichibukai","Revolutionary Army","Kuja Pirates","Straw Hat Pirates","Thriller Bark Pirates","Marine","Fire Tank Pirates","Drake Pirates","On Air Pirates","Beautiful Pirates","Marine","Hawkins Pirates","Barto Club","Fire Tank Pirates","New Fish-Man Pirates","Straw Hat Pirates","Chinjao Family","Tontatta Pirates","Straw Hat Pirates","New Giant Warrior Pirates","Ideo Pirates","Straw Hat Pirates","Buggy Pirates","Straw Hat Pirates","Yonta Maria Grand Fleet"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>power<\/th>\n      <th>character<\/th>\n      <th>level<\/th>\n      <th>affiliations<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":3,"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
-class: center, inverse
+
+class: middle
+
+# Data wrangling
+
+&lt;iframe src="https://arifpras.github.io/WranglingViz/" width="100%" height="400px" data-external="1"&gt;&lt;/iframe&gt;
+
+.left[.footnote[.small[Source: https://arifpras.github.io/WranglingViz/]]]
+
+---
+class: inverse, center, middle
+
+# Data Visualisation
+
+---
+# Datasaurus
 
 .center[
-![:scale 50%](https://media.giphy.com/media/SUREsnI6v55CM/giphy.gif)
+![:scale 40%](https://raw.githubusercontent.com/Z3tt/DataViz-Teaching/master/Datasaurus/datasauRus.gif)
+
+Never trust summary statistics alone.
 ]
 
-.large[&lt;span style="color:orange"&gt; **Time to practice!** &lt;/span&gt;]
+.footnote[.small[Source: `library(datasauRus)`; https://github.com/Z3tt/TidyTuesday/tree/master/plots/2020_42]]
+---
 
-&lt;span style="color:white"&gt;Wrangling the datasets, then visualising
-the most powerful characters in One Piece based on their ages.&lt;/span&gt;
+# ggplot2
+
+.pull-left[
+### .left[Basic elements:
+*   Data: `data = ...`
+*   Geometries: `geom_`
+*   Aesthetics: `aes(x = ..., y = ..., ...)`
+*   Scales: `scale_`
+*   Statistical transformations: `stat_`
+*   Coordinate system: `coord_`
+*   Facets: `facet_`
+*   Visual themes: `theme()`
+]
+]
+
+---
+
+class: middle
+
+# Decision trees
+
+&lt;iframe src="https://www.data-to-viz.com/#portfolio" width="100%" height="400px" data-external="1"&gt;&lt;/iframe&gt;
+
+.left[.footnote[.small[Source: https://www.data-to-viz.com]]]
+
+---
+
+# Assigning colors
+
+.panelset[
+
+.panel[
+.panel-name[1: Color palette]
+
+&lt;center&gt;&lt;img src="https://d33wubrfki0l68.cloudfront.net/c25e86bc59337d57b4e24c4bf80ecbb12db841f8/59edf/img/ggplot-tutorial/map-principles-color-schemes.png" width="1000px" /&gt;&lt;/center&gt;
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;
+.footnote[.small[Source: "Hands-On Data Visualization" by Jack Dougherty &amp; Ilya Ilyankou]]
+]
+
+.panel[
+.panel-name[2: Qualitative variables]
+
+&lt;center&gt;&lt;img src="https://d33wubrfki0l68.cloudfront.net/1336224150e3b2822a76db24f51728b41f0540f5/25251/img/ggplot-tutorial/nominal_ordinal_binary.png" height="400px" /&gt;&lt;/center&gt;
+
+&lt;br&gt;&lt;br&gt;
+.footnote[.small[Source: https://github.com/allisonhorst/stats-illustrations/]]
+]
+
+.panel[
+.panel-name[3: Quantitative variables]
+
+&lt;center&gt;&lt;img src="https://d33wubrfki0l68.cloudfront.net/f9c11a301f597b8e2e5a2f26c691b7c51450c7aa/754d3/img/ggplot-tutorial/continuous_discrete.png" height="400px" /&gt;&lt;/center&gt;
+
+&lt;br&gt;&lt;br&gt;
+.footnote[.small[Source: https://github.com/allisonhorst/stats-illustrations/]]
+]
+]
+
+---
+class: center, inverse, middle
+
+.center[
+![:scale 55%](https://media.giphy.com/media/rCdzKS756yiGs/giphy.gif)
+]
+&lt;br&gt;
+.large[&lt;span style="color:orange"&gt; Let's practice! &lt;/span&gt;]
 
 ---
 
@@ -212,7 +295,7 @@ the most powerful characters in One Piece based on their ages.&lt;/span&gt;
 
 # Plot
 .center[
-&lt;img src="01_Data_Wrangling_slide_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="01_Data_Wrangling_slide_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -248,6 +331,7 @@ class: center, middle, clear
 .large[
 Thank you for listening.
 ]
+.small[**All teaching materials are available on https://github.com/arifpras/KelasData**]
 
 .small[
 Slides created via the R packages:
@@ -259,10 +343,12 @@ The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihu
 ---
 
 # Acknowledgements
-
+.small[
 *   Grolemund, G., &amp; Wickham, H. (2017). R for Data Science. O’Reilly Media.
-*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
-*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686.
+*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/
+*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+*   Claus O. Wilke: Data Visualization in R, https://wilkelab.org/SDS375/
+*   Cedric Scherer's personal blog: https://www.cedricscherer.com/
 *   ...and other sources i.e. stackoverflow.com, github.com, etc.
 
 ### Datasets:
@@ -271,8 +357,9 @@ The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihu
 
 ### GIF files:
 *   Luffy: https://pa1.narvii.com/5869/51088074557b4091944c2007ec33384020920f87_hq.gif
-*   Zoro vs. Pacifista: https://media.giphy.com/media/SUREsnI6v55CM/giphy.gif
+*   Luffy vs. Doflamingo: https://media.giphy.com/media/rCdzKS756yiGs/giphy.gif
 *   Shanks vs. Akainu: https://www.quora.com/What-would-happen-if-Deku-was-sent-to-the-One-Piece-universe
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
