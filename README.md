@@ -6,7 +6,7 @@ All files are intended to be used in R courses organised by the Ministry of Fina
 The presentation is available on https://arifpras.github.io/KelasData/ and https://arifpras.netlify.app/#1
 
 The html format of the practice session could be seen on: 
-- Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/ :unlock:
+- Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/ :white_check_mark:
 - Basic modeling: :hourglass_flowing_sand:
 
 Added additional files on 29 Oct. 2021:
