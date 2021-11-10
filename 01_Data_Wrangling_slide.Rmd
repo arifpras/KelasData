@@ -1,8 +1,8 @@
 ---
 title: "Statistics with R:"
-subtitle: "Data Wrangling | Data Visualisation"
+subtitle: "Data Wrangling | Data Visualisation | Basic Modelling"
 author: 'Arif P. Sulistiono'
-date: '<br>Kelas Data on 28 October 2021 and 4 November 2021<br><a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>'
+date: '<br>Kelas Data on 28 Oct. 2021, 4 Nov. 2021, and 11 Nov. 2021<br> <a href="https://www.instagram.com/mof.dac"> <i class="fa fa-instagram fa-fw"></i>mof.dac</a>'
 output:
   xaringan::moon_reader:
     css: [default, metropolis, metropolis-fonts, custom.css]
@@ -186,19 +186,6 @@ DT::datatable(op_powers, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
 ---
-
-class: middle
-
-# Data wrangling
-
-```{r echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "100%", fig.align = "center", fig.retina = 3}
-
-knitr::include_url("https://arifpras.github.io/WranglingViz/")
-```
-
-.left[.footnote[.small[Source: https://arifpras.github.io/WranglingViz/]]]
-
----
 class: inverse, center, middle
 
 # Data Visualisation
@@ -231,8 +218,6 @@ Never trust summary statistics alone.
 ]
 
 ---
-
-class: middle
 
 # Decision trees
 
@@ -276,15 +261,6 @@ knitr::include_url("https://www.data-to-viz.com/#portfolio")
 .footnote[.small[Source: https://github.com/allisonhorst/stats-illustrations/]]
 ]
 ]
-
----
-class: center, inverse, middle
-
-.center[
-![:scale 55%](https://media.giphy.com/media/rCdzKS756yiGs/giphy.gif)
-]
-<br>
-.large[<span style="color:orange"> Let's practice! </span>]
 
 ---
 
@@ -342,7 +318,7 @@ op_powers %>%
   )
 ```
 
-# Plot
+# Line plot
 .center[
 ```{r ref.label = 'plot-last', fig.callout = TRUE, echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "70%", fig.align = "center", fig.retina = 3}
 ```
@@ -369,6 +345,174 @@ op_powers %>%
 .pull-right[
 <img src="https://miro.medium.com/max/960/1*W58miPPhRcKO4dYf6eBqvw.gif" style="width: 80%" align="left">
 ]
+
+---
+# Practical sessions
+
+```{r echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "100%", fig.align = "center", fig.retina = 3}
+
+knitr::include_url("https://arifpras.github.io/WranglingViz/")
+```
+
+.left[.footnote[.small[Source: https://arifpras.github.io/WranglingViz/]]]
+
+
+---
+class: inverse, center, middle
+
+# Basic Modelling
+
+---
+# Initial specifications
+
+&nbsp;
+.center[
+![:scale 50%](
+https://c.tenor.com/WcoVJ8aQcwkAAAAC/one-piece-monkey-d-luffy.gif)
+
+&nbsp;
+&nbsp;
+$$ \text{Sales}_t = \alpha_0 + \alpha_1 \text{Chapters}_t + \alpha_2 \text{LastMovie}_t + \alpha_3 \text{VIX index}_t + \upsilon_t  $$
+$$ \text{Sales}_t = \beta_0 + \beta_1 \text{Pages}_t + \beta_2 \text{LastMovie}_t + \beta_3 \text{VIX index}_t + \epsilon_t  $$
+]
+
+---
+# Dataset
+
+```{r eval=requireNamespace("DT", quietly=TRUE)}
+library(readxl)
+op_sales <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_sales")
+DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 3))
+```
+
+---
+
+```{r plot-ols, fig.show='hide', echo = FALSE}
+#library(readxl)
+#op_ages <- read_excel(path = "OP_all.xlsx", sheet = "OP_ages")
+#op_powers <- read_excel(path = "OP_all.xlsx", sheet = "OP_powers")
+
+library(tidyverse)
+op_sales %>%
+	#set the data 
+  pivot_longer(cols = pages:vixi_avg,
+		names_to = "obsvar",
+		values_to = "obsval") %>%
+	mutate(obsvar = recode(obsvar,
+				 chapters = "Chapters",
+				 last_movie_days = "Days from Last Movie",
+				 pages = "Pages",
+				 sales_mio = "Total Sales (in millions)",
+				 vixi_avg = "VIX Index (in average)"
+	)) %>% 
+	#plot the dataset
+	filter(obsvar == "Total Sales (in millions)") %>% 
+  ggplot(aes(x = volume, y = obsval)) +
+	geom_line() +
+	facet_wrap(~obsvar, scales = "free", nrow = 1) +
+	theme_minimal() +
+	labs(x = "Release Date", y = "") +
+	scale_color_brewer(palette = "Set1") +
+  theme(
+    axis.text.x = element_text(size = 8),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_text(size = 7),
+    axis.line.y = element_blank(),
+    axis.title.y = element_text(size = 7),
+    axis.text.y = element_text(size = 8),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 7),
+    legend.key.size = unit(0.5, "cm"),
+    legend.spacing = unit(1, "cm"),
+    plot.title = element_text(hjust = 0, size = 13, face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, size = 12),
+    # legend.title = element_blank(),
+    legend.position = "right",
+    strip.text.x = element_text(size = 8),
+    panel.grid.major.y = element_line(colour = "grey97"),
+    panel.ontop = FALSE,
+    panel.spacing = unit(1, "lines")
+  )
+
+```
+
+# Dependent variable
+
+.center[
+```{r ref.label = 'plot-ols', fig.callout = TRUE, echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "70%", fig.align = "center", fig.retina = 3}
+```
+]
+
+---
+
+```{r plot-ols2, fig.show='hide', echo = FALSE}
+#library(readxl)
+library(tidyverse)
+op_sales %>%
+	#set the data 
+  pivot_longer(cols = pages:vixi_avg,
+		names_to = "obsvar",
+		values_to = "obsval") %>%
+	mutate(obsvar = recode(obsvar,
+				 chapters = "Chapters",
+				 last_movie_days = "Days from Last Movie",
+				 pages = "Pages",
+				 sales_mio = "Total Sales (in millions)",
+				 vixi_avg = "VIX Index (in average)"
+	)) %>% 
+	#plot the dataset
+	filter(obsvar != "Total Sales (in millions)") %>% 
+  ggplot(aes(x = volume, y = obsval)) +
+	geom_line() +
+	facet_wrap(~obsvar, scales = "free", nrow = 2) +
+	theme_minimal() +
+	labs(x = "Release Date", y = "") +
+	scale_color_brewer(palette = "Set1") +
+  theme(
+    axis.text.x = element_text(size = 8),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.title.x = element_text(size = 7),
+    axis.line.y = element_blank(),
+    axis.title.y = element_text(size = 7),
+    axis.text.y = element_text(size = 8),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    legend.title = element_text(size = 7),
+    legend.text = element_text(size = 7),
+    legend.key.size = unit(0.5, "cm"),
+    legend.spacing = unit(1, "cm"),
+    plot.title = element_text(hjust = 0, size = 13, face = "bold"),
+    plot.subtitle = element_text(hjust = 0, size = 12),
+    plot.caption = element_text(hjust = 0, size = 12),
+    # legend.title = element_blank(),
+    legend.position = "right",
+    strip.text.x = element_text(size = 8),
+    panel.grid.major.y = element_line(colour = "grey97"),
+    panel.ontop = FALSE,
+    panel.spacing = unit(1, "lines")
+  )
+
+```
+
+# Independent variables
+
+.center[
+```{r ref.label = 'plot-ols2', fig.callout = TRUE, echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "70%", fig.align = "center", fig.retina = 3}
+```
+]
+
+---
+class: center, inverse, middle
+
+.center[
+![:scale 50%](https://c.tenor.com/XlBjyibau0oAAAAC/fujitora-black-sword.gif)
+]
+.large[<span style="color:orange"> Let's practice! </span>]
 
 ---
 
@@ -402,11 +546,17 @@ The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihu
 *   ...and other sources i.e. stackoverflow.com, github.com, etc.
 
 ### Datasets:
-*   Characters' age: https://listfist.com/list-of-one-piece-characters-by-age
-*   Characters' power: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+*   One Piece chapter and character: https://www.kaggle.com/michau96
+*   One Piece anime rating: https://www.kaggle.com/aditya2803
+*   One Piece power ranking: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+*   One Piece characters' age: https://listfist.com/list-of-one-piece-characters-by-age
+*   One Piece by volume: https://listfist.com/list-of-one-piece-volumes
+*   One Piece by chapter: https://listfist.com/list-of-one-piece-manga-chapters
+*   One Piece sales: https://erzat.blog/top-sales-according-to-series-for-the-month-of-september-2021/ and https://twitter.com/WSJ_manga/status/1214168838511702016
+*   VIX index: https://finance.yahoo.com/quote/%5EVIX?p=%5EVIX
 
 ### GIF files:
-*   Luffy: https://pa1.narvii.com/5869/51088074557b4091944c2007ec33384020920f87_hq.gif
-*   Luffy vs. Doflamingo: https://media.giphy.com/media/rCdzKS756yiGs/giphy.gif
+*   Luffy, flying: https://pa1.narvii.com/5869/51088074557b4091944c2007ec33384020920f87_hq.gif
+*   Luffy, thinking: https://c.tenor.com/WcoVJ8aQcwkAAAAC/one-piece-monkey-d-luffy.gif
 *   Shanks vs. Akainu: https://www.quora.com/What-would-happen-if-Deku-was-sent-to-the-One-Piece-universe
 ]
