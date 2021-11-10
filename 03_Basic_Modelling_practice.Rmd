@@ -519,7 +519,7 @@ rm(list=ls())
 *   ...and other sources i.e. stackoverflow.com, github.com
 
 ## Datasets
-*   One Piece chapter and character: https://www.kaggle.com/michau96
-*   One Piece anime rating: https://www.kaggle.com/aditya2803
-*   One Piece power ranking: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
-*   One Piece characters' age: https://listfist.com/list-of-one-piece-characters-by-age
+*   One Piece by volume: https://listfist.com/list-of-one-piece-volumes
+*   One Piece by chapter: https://listfist.com/list-of-one-piece-manga-chapters
+*   One Piece sales: https://erzat.blog/top-sales-according-to-series-for-the-month-of-september-2021/ and  https://twitter.com/WSJ_manga/status/1214168838511702016
+*   VIX index: https://finance.yahoo.com/quote/%5EVIX?p=%5EVIX

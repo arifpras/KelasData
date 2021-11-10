@@ -510,16 +510,26 @@ op_sales %>%
 class: center, inverse, middle
 
 .center[
-![:scale 50%](https://c.tenor.com/XlBjyibau0oAAAAC/fujitora-black-sword.gif)
+![:scale 50%](https://media.giphy.com/media/f1kifoMrj6g4E/giphy.gif)
 ]
 .large[<span style="color:orange"> Let's practice! </span>]
+
+---
+# Practical sessions
+
+```{r echo = FALSE, fig.width = 6, fig.asp = 0.618, out.width = "100%", fig.align = "center", fig.retina = 3}
+
+knitr::include_url("https://arifpras.github.io/BasicModelling/")
+```
+
+.left[.footnote[.small[Source: https://arifpras.github.io/BasicModelling/]]]
 
 ---
 
 class: center, middle, clear
 
 .center[
-![:scale 50%](https://qph.fs.quoracdn.net/main-qimg-e9805b884c59817513f29f56944651e9)
+![:scale 50%](https://media.giphy.com/media/tIZUToOMEFGM0/giphy.gif)
 ]
 
 .large[
