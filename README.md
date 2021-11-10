@@ -3,7 +3,7 @@ All files are intended to be used in R courses organised by the Ministry of Fina
 - Data Visualisation, 4 November 2021 :white_check_mark:
 - Basic Modeling, 11 November 2021 :hourglass_flowing_sand:
 
-The presentation is available on https://arifpras.github.io/KelasData/ and https://arifpras.netlify.app/#1
+The presentation is available on https://arifpras.github.io/KelasData/ or https://arifpras-kelasdata.netlify.app/
 
 The html format of the practice session could be seen on: 
 - Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/ :white_check_mark:
