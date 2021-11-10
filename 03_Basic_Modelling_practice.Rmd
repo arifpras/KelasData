@@ -1,0 +1,525 @@
+---
+title: "Basic Modelling"
+subtitle: 'Kelas Data R organised by <a href="https://www.instagram.com/mof.dac"> <i class="fab fa-instagram fa-fw"></i>mof.dac</a>'
+author: 'Arif P. Sulistiono / @arifpras'
+date: '11 November 2021'
+output:
+  html_document:
+    df_print: paged
+    #self_contained: no
+    toc: true
+    toc_float: true
+    theme: lumen #united
+    highlight: tango
+    fig_caption: yes
+    css: style.css
+    number_sections: TRUE
+    includes:
+      after_body: footer.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+***
+
+# Prerequisites
+
+## Materials
+Please visit https://github.com/arifpras/KelasData for the datasets and other relevant materials to be used during the sessions.
+
+## Clearing the environment
+```{r clearing-first, echo=TRUE}
+rm(list=ls())
+ls()
+```
+
+## Packages and libraries
+```{r packages, include = FALSE}
+#install.packages("pacman")
+pacman::p_load(tidyverse, readxl, skimr)
+```
+
+```{r icon, include=FALSE}
+#could be ignored, related to uploading to website
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+```{r directory, echo=TRUE}
+#setting working directory
+setwd("/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets")
+```
+
+## Datasets
+```{r onepiece}
+op_sales <- readxl::read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_sales")
+```
+
+```{r checking}
+glimpse(op_sales)
+
+#change the date format: from <POSITX> to <date>
+op_sales <- op_sales %>% 
+  mutate(release_date = as.Date(release_date))
+
+glimpse(op_sales)
+```
+
+```{r pivot-longer}
+(
+  db01 <- op_sales %>%
+    pivot_longer(
+      cols = pages:vixi_avg,
+      names_to = "obsvar",
+      values_to = "obsval"
+    ) %>%
+    mutate(
+      obsvar = recode(
+        obsvar,
+        chapters = "Chapters",
+        last_movie_days = "Days from Last Movie",
+        pages = "Pages",
+        sales_mio = "Total Sales (in millions)",
+        vixi_avg = "VIX Index (in average)"
+      )
+    )
+)
+```
+
+# Plotting
+
+## Line chart
+```{r line-chart, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  plot01 <- db01 %>%
+    #plot the dataset
+    ggplot(aes(x = volume, y = obsval)) +
+    geom_line(aes(color = obsvar)) +
+    facet_wrap( ~ obsvar, scales = "free", nrow = 2) +
+    theme_light() +
+    labs(x = "\nVolume", y = "") +
+    #ggthemes::scale_color_colorblind() +
+    scale_color_brewer(palette = "Set1") +
+    theme(
+      axis.text.x = element_text(size = 8),
+      axis.ticks.x = element_blank(),
+      axis.line.x = element_blank(),
+      axis.title.x = element_text(size = 7),
+      axis.line.y = element_blank(),
+      axis.title.y = element_text(size = 7),
+      axis.text.y = element_text(size = 8),
+      plot.title.position = "plot",
+      plot.caption.position = "plot",
+      legend.title = element_text(size = 7),
+      legend.text = element_text(size = 7),
+      legend.key.size = unit(0.5, "cm"),
+      legend.spacing = unit(1, "cm"),
+      plot.title = element_text(hjust = 0, size = 13, face = "bold"),
+      plot.subtitle = element_text(hjust = 0, size = 12),
+      plot.caption = element_text(hjust = 0, size = 12),
+      # legend.title = element_blank(),
+      legend.position = "bottom",
+      strip.text.x = element_text(size = 8),
+      panel.grid.major.y = element_line(colour = "grey97"),
+      panel.ontop = FALSE,
+      panel.spacing = unit(1, "lines")
+    ) +
+    guides(color = guide_legend(title = "Observable variables:"))
+)
+```
+
+## Box plot
+```{r box-plot, out.width = "100%", fig.align = "center", fig.retina = 3}
+pacman::p_load(colorspace)
+(
+  plot02 <- db01 %>%
+    #plot the dataset
+    ggplot(aes(x = volume, y = obsval)) +
+    geom_boxplot(aes(
+      color = obsvar,
+      fill = after_scale(desaturate(lighten(color, .7), .7))
+      ),
+      size = 1) +
+    #geom_line(aes(color = obsvar)) +
+    facet_wrap(~ obsvar, scales = "free", nrow = 2) +
+    theme_light() +
+    labs(
+      title = "Boxplot",
+      x = "\nVolume", y = "") +
+    #ggthemes::scale_color_colorblind() +
+    scale_color_brewer(palette = "Set1") +
+    theme(
+      axis.text.x = element_text(size = 8),
+      axis.ticks.x = element_blank(),
+      axis.line.x = element_blank(),
+      axis.title.x = element_text(size = 7),
+      axis.line.y = element_blank(),
+      axis.title.y = element_text(size = 7),
+      axis.text.y = element_text(size = 8),
+      plot.title.position = "plot",
+      plot.caption.position = "plot",
+      legend.title = element_text(size = 7),
+      legend.text = element_text(size = 7),
+      legend.key.size = unit(0.5, "cm"),
+      legend.spacing = unit(1, "cm"),
+      plot.title = element_text(hjust = 0, size = 16, face = "bold"),
+      plot.subtitle = element_text(hjust = 0, size = 12),
+      plot.caption = element_text(hjust = 0, size = 12),
+      # legend.title = element_blank(),
+      legend.position = "bottom",
+      strip.text.x = element_text(size = 8),
+      panel.grid.major.y = element_line(colour = "grey97"),
+      panel.ontop = FALSE,
+      panel.spacing = unit(1, "lines")
+      ) +
+    guides(color = guide_legend(title = "Observable variables:"))
+)
+```
+
+## Histogram
+```{r histogram, out.width = "100%", fig.align = "center", fig.retina = 3}
+#pacman::p_load(colorspace)
+(
+  plot03 <- db01 %>%
+    #plot the dataset
+    ggplot(aes(x = obsval)) +
+    geom_histogram(bins = 50, 
+                   aes(
+                     color = obsvar,
+                     fill = after_scale(desaturate(lighten(color, .7), .7))
+                     )) +
+    facet_wrap(~ obsvar, scales = "free", nrow = 2) +
+    theme_light() +
+    labs(
+      title = "Histogram",
+      x = "\nRelease Date", y = "") +
+    #ggthemes::scale_color_colorblind() +
+    scale_color_brewer(palette = "Set1") +
+    theme(
+      axis.text.x = element_text(size = 8),
+      axis.ticks.x = element_blank(),
+      axis.line.x = element_blank(),
+      axis.title.x = element_text(size = 7),
+      axis.line.y = element_blank(),
+      axis.title.y = element_text(size = 7),
+      axis.text.y = element_text(size = 8),
+      plot.title.position = "plot",
+      plot.caption.position = "plot",
+      legend.title = element_text(size = 7),
+      legend.text = element_text(size = 7),
+      legend.key.size = unit(0.5, "cm"),
+      legend.spacing = unit(1, "cm"),
+      plot.title = element_text(hjust = 0, size = 16, face = "bold"),
+      plot.subtitle = element_text(hjust = 0, size = 12),
+      plot.caption = element_text(hjust = 0, size = 12),
+      # legend.title = element_blank(),
+      legend.position = "bottom",
+      strip.text.x = element_text(size = 8),
+      panel.grid.major.y = element_line(colour = "grey97"),
+      panel.ontop = FALSE,
+      panel.spacing = unit(1, "lines")
+      ) +
+    guides(color = guide_legend(title = "Observable variables:"))
+)
+```
+
+# Descriptive statistics
+
+## Summary: skim
+```{r summ-skim}
+op_sales %>% select(release_date, pages, chapters, sales_mio, last_movie_days, vixi_avg) %>% 
+  skimr::skim()
+```
+
+## Summary: stargazer
+```{r summ_stargazer}
+pacman::p_load(pastecs, stargazer)
+
+(
+  summ01 <- op_sales %>%
+    select(pages:vixi_avg) %>%
+    rename("Chapters" = chapters,
+           "Days from Last Movie" = last_movie_days,
+           "Pages" = pages,
+           "Total Sales (in millions)" = sales_mio,
+           "VIX Index (in average)" = vixi_avg)
+)
+
+summ01 %>%
+  as.data.frame() %>% 
+  stargazer(type = 'text', out = "descsumm.txt", digits = 1) #flip = TRUE
+```
+
+## Summary: dplyr
+```{r summ_dplyr}
+(
+  summ02 <- db01 %>%
+    group_by(obsvar) %>%
+    summarise(
+      Obs = n(),
+      Mean = mean(obsval, na.rm = TRUE),
+      Std.Dev = sd(obsval, na.rm = TRUE),
+      Min. = min(obsval, na.rm = TRUE),
+      Max. = max(obsval, na.rm = TRUE),
+      P25 = quantile(obsval, 0.25, na.rm = TRUE),
+      P75 = quantile(obsval, 0.75, na.rm = TRUE),
+      Var. = var(obsval, na.rm = TRUE)
+  )
+)
+```
+
+## Summary: parameters
+```{r summ-param}
+pacman::p_load(parameters)
+
+(
+  summ03 <- op_sales %>%
+    select(pages:vixi_avg) %>%
+    rename("Chapters" = chapters,
+           "Days from Last Movie" = last_movie_days,
+           "Pages" = pages,
+           "Total Sales (in millions)" = sales_mio,
+           "VIX Index (in average)" = vixi_avg) %>%
+    describe_distribution() %>% 
+    t()
+)
+```
+
+# Correlations
+```{r corr}
+library(corrr)
+(
+  corr01 <- op_sales %>% 
+    select(pages:vixi_avg) %>%
+    rename("Chapters" = chapters,
+           "Days from Last Movie" = last_movie_days,
+           "Pages" = pages,
+           "Total Sales (in millions)" = sales_mio,
+           "VIX Index (in average)" = vixi_avg) %>% 
+    correlate() %>% 
+    shave() %>% 
+    fashion()
+)
+```
+
+# Simple Regressions
+## Modelling: base
+```{r ols01-base}
+ols01bs <- lm(sales_mio ~ chapters + last_movie_days + vixi_avg, 
+                data = op_sales)
+
+summary(ols01bs)
+```
+
+```{r ols02-base}
+ols02bs <- lm(sales_mio ~ pages + last_movie_days + vixi_avg, 
+                data = op_sales)
+
+summary(ols02bs)
+```
+
+## Modelling: dplyr
+```{r ols01-dplyr}
+pacman::p_load(broom)
+(
+  ols01dp <- op_sales %>%
+    select(pages:vixi_avg) %>%
+    lm(sales_mio ~ chapters + last_movie_days + vixi_avg, 
+       data = .) %>%
+    tidy()
+)
+```
+
+```{r ols02-dplyr}
+(
+  ols02dp <- op_sales %>%
+    select(pages:vixi_avg) %>%
+    lm(sales_mio ~ pages + last_movie_days + vixi_avg, 
+       data = .) %>%
+    tidy()
+)
+```
+
+## Modelling: estimatr
+```{r ols01-estimatr}
+pacman::p_load(estimatr)
+
+(
+  ols01es <- op_sales %>%
+    lm_robust(sales_mio ~ chapters + last_movie_days + vixi_avg,
+              data = . ,se_type = "stata") %>%
+    tidy()
+)
+```
+
+```{r ols02-estimatr}
+pacman::p_load(estimatr)
+
+(
+  ols02es <- op_sales %>%
+    lm_robust(sales_mio ~ pages + last_movie_days + vixi_avg,
+              data = . ,se_type = "stata") %>%
+    tidy()
+)
+```
+
+## Export: stargazer
+```{r report-strgz}
+stargazer(ols01bs, ols02bs, type = "text", out = "ols_base.txt")
+```
+
+## Export: texreg
+```{r report-texreg, out.width = "100%", fig.align = "center", fig.retina = 3}
+pacman::p_load(texreg)
+
+screenreg(list(ols01bs, ols02bs), digits = 2)
+#knitreg(list(ols01bs, ols02bs), digits = 2)
+#wordreg(list(ols01bs, ols02bs), digits = 2, file = "ols_reg.doc")
+plotreg(list(ols01bs, ols02bs), digits = 2)
+```
+
+## Export: `lm_robust` & `wordreg`
+```{r estm-strgz}
+#doesn't work: lm_robust & stargazer & texreg
+ols03es <- lm_robust(sales_mio ~ chapters + last_movie_days + vixi_avg,
+              data = op_sales, se_type = "stata")
+
+ols04es <- lm_robust(sales_mio ~ pages + last_movie_days + vixi_avg,
+              data = op_sales, se_type = "stata")
+
+#stargazer(ols03es, ols04es, type = "text", out = "ols_estimatr.txt")
+#wordreg(list(ols03es, ols04es), digits = 2, file = "ols_estimatr.doc")
+```
+
+## Plot: sjPlot single
+```{r sjPlot-single, out.width = "100%", fig.align = "center", fig.retina = 3}
+#source: http://www.strengejacke.de/sjPlot/index.html
+pacman::p_load(sjPlot, sjmisc, sjlabelled)
+theme_set(theme_test())
+
+plot_model(ols01bs,
+           title = "Sales (in mio)",
+           show.values = TRUE, 
+           type = "est", 
+           digits = 4) +
+  #edit with ggplot2
+  scale_y_continuous(limits = c(-0.12,0.12))
+
+plot_model(ols02bs,
+           title = "Sales (in mio)",
+           show.values = TRUE, 
+           type = "est", 
+           digits = 4) +
+  #edit with ggplot2
+  scale_y_continuous(limits = c(-0.12,0.12))
+```
+
+## Plot: sjPlot multiple
+```{r sjPlot-multiple, out.width = "100%", fig.align = "center", fig.retina = 3}
+plot_models(ols01bs, ols02bs,
+            title = "Sales (in mio)",
+            show.values = TRUE, 
+            show.intercept = FALSE, 
+            line.size = 0.1,
+            p.shape = TRUE,
+            value.size = 3,
+            digits = 4) +
+  #edit with ggplot2
+  scale_y_continuous(limits = c(-0.12,0.12)) +
+  theme(
+      axis.text.x = element_text(size = 8),
+      axis.ticks.x = element_blank(),
+      axis.line.x = element_blank(),
+      axis.title.x = element_text(size = 8),
+      axis.line.y = element_blank(),
+      axis.title.y = element_text(size = 8),
+      axis.text.y = element_text(size = 8),
+      plot.title.position = "plot",
+      plot.caption.position = "plot",
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 8),
+      legend.key.size = unit(0.5, "cm"),
+      legend.spacing = unit(1, "cm"),
+      plot.title = element_text(hjust = 0, size = 16, face = "bold"),
+      plot.subtitle = element_text(hjust = 0, size = 12),
+      plot.caption = element_text(hjust = 0, size = 12),
+      # legend.title = element_blank(),
+      legend.position = "bottom",
+      strip.text.x = element_text(size = 8),
+      panel.grid.major.y = element_line(colour = "grey97"),
+      panel.ontop = FALSE,
+      panel.spacing = unit(1, "lines")
+      )
+```
+
+## Plot: `forestmodel`
+```{r forest, out.width = "100%", fig.align = "center", fig.retina = 3}
+library(forestmodel)
+
+forest_model(ols01bs, theme = theme_forest())
+forest_model(ols02bs, theme = theme_forest())
+```
+
+## Performance: glance
+```{r glancing}
+gl01bs <- broom::glance(ols01bs) %>% t() %>% round(digits = 2)
+gl02bs <- broom::glance(ols02bs) %>% t() %>% round(digits = 2)
+
+cbind(gl01bs, gl02bs)
+```
+
+## Performance: check model
+```{r check-mod01, out.width = "100%", fig.align = "center", fig.retina = 3}
+pacman::p_load(patchwork, performance)
+(
+  ch01 <- check_model(ols01bs)
+)
+```
+
+```{r check-mod02, out.width = "100%", fig.align = "center", fig.retina = 3}
+(
+  ch02 <- check_model(ols02bs)
+)
+```
+
+## Performance: compare
+```{r performance, out.width = "100%", fig.align = "center", fig.retina = 3}
+#install.packages("performance", repos = "https://easystats.r-universe.dev")
+library(performance)
+library(see)
+
+(
+  comp <- compare_performance(ols01bs, ols02bs)
+)
+plot(comp)
+```
+
+# Clearing
+
+```{r clearing-last, echo=TRUE}
+#clearing the environment
+ls()
+rm(list=ls())
+```
+
+***
+
+# Acknowledgements
+
+## References
+
+*   Grolemund, G., & Wickham, H. (2017). R for Data Science. O’Reilly Media.
+*   R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
+*   Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686.
+*   Claus O. Wilke: Data Visualization in R, https://wilkelab.org/SDS375/
+*   Cedric Scherer's personal blog: https://www.cedricscherer.com/
+*   Kim, A. Y. and Ismay, C. and Kuhn, M. (2021) Take a moderndive into introductory linear regression with R Journal of Open Source Education. 4(41), 115 https://doi.org/10.21105/jose.00115
+*   The R Graph Gallery: https://www.r-graph-gallery.com/index.html
+*   ...and other sources i.e. stackoverflow.com, github.com
+
+## Datasets
+*   One Piece chapter and character: https://www.kaggle.com/michau96
+*   One Piece anime rating: https://www.kaggle.com/aditya2803
+*   One Piece power ranking: https://www.opfanpage.com/2018/06/29/one-piece-power-ranking-chart/
+*   One Piece characters' age: https://listfist.com/list-of-one-piece-characters-by-age
