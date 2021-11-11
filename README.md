@@ -1,13 +1,16 @@
 All files are intended to be used in R courses organised by the Ministry of Finance - Data Analytics Community (https://github.com/mofdac):
-- Data Wrangling, 28 October 2021: 01_Data_Wrangling_practice.Rmd
-- Data Visualisation, 4 November 2021
-- Basic Modelling, 11 November 2021
+- Data Wrangling, 28 October 2021: 01_Data_Wrangling_practice.Rmd :white_check_mark:
+- Data Visualisation, 4 November 2021: 01_Data_Wrangling_practice.Rmd :white_check_mark:
+- Basic Modeling, 11 November 2021: 03_Basic_Modelling_practice.Rmd :white_check_mark:
+
+The presentation is available on https://arifpras.github.io/KelasData/ or https://arifpras-kelasdata.netlify.app/
 
 The html format of the practice session could be seen on: 
-- Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/
+- Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/ :white_check_mark:
+- Basic modeling: https://arifpras.github.io/BasicModelling/ :white_check_mark:
 
 Added additional files on 29 Oct. 2021:
-- Utilising _xaringan_ package to create the presentation: 01_Data_Wrangling_slide.Rmd
+- Utilising _xaringan_ package to create the presentation: KelasData.Rmd
 - Animating lineplot: 98_animating_lineplot_rupiah.R
 - Animating barplot: 98_animating_barplot_debt.R
 - Web-scrapping One Piece by volume, then combining them with VIX index data: 99_Web_Scrapping_volumes.Rmd
