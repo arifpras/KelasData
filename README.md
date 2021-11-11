@@ -7,7 +7,7 @@ The presentation is available on https://arifpras.github.io/KelasData/ or https:
 
 The html format of the practice session could be seen on: 
 - Data wrangling and visualisation: https://arifpras.github.io/WranglingViz/ :white_check_mark:
-- Basic modeling: https://arifpras.github.io/BasicModeling/ :hourglass_flowing_sand:
+- Basic modeling: https://arifpras.github.io/BasicModelling/ :hourglass_flowing_sand:
 
 Added additional files on 29 Oct. 2021:
 - Utilising _xaringan_ package to create the presentation: 01_Data_Wrangling_slide.Rmd
