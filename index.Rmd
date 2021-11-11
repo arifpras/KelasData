@@ -382,7 +382,7 @@ $$ \text{Sales}_t = \beta_0 + \beta_1 \text{Pages}_t + \beta_2 \text{LastMovie}_
 ```{r eval=requireNamespace("DT", quietly=TRUE)}
 library(readxl)
 op_sales <- read_excel(path = "/Users/arifpras/OneDrive - The University of Nottingham/BB_KelasData/KelasData/00_Datasets/OP_all.xlsx", sheet = "OP_sales")
-DT::datatable(op_ages, fillContainer = FALSE, options = list(pageLength = 3))
+DT::datatable(op_sales, fillContainer = FALSE, options = list(pageLength = 3))
 ```
 
 ---
